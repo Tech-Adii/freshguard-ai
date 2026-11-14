@@ -53,23 +53,26 @@ When users query fast-moving, high-stakes information:
 FreshGuard combines live web evidence retrieval with dual-engine AI reasoning:
 
 ```mermaid
-flowchart TD
-    A["Raw AI Output or User Statement"] --> B["1. Claim Deconstruction & Volatility Indexing"]
-    B -->|Atomic Statements + Volatility Score 0.0-1.0| C{"Temporal Sensitivity Gate"}
+graph TD
+    A["Raw AI Output or User Statement"] --> B["1. Claim Deconstruction and Volatility Indexing"]
+    B --> C{"Temporal Sensitivity Gate"}
     
-    C -->|Evergreen Math / Physics / Established History| D["🟢 Fast-Path Evergreen (100% Fresh, 0 Decay)"]
-    C -->|Volatile Facts: Pricing, APIs, Leadership, Specs| E["2. Dual-Query Search Formulation"]
+    C -->|Evergreen Math or Physics| D["Fast-Path Evergreen (100% Fresh)"]
+    C -->|Volatile Facts - Pricing, APIs, Leadership| E["2. Dual-Query Search Formulation"]
     
-    E -->|Direct Query + 2026 Superseding Discovery| F["Tavily Search Engine (by Nebius)"]
-    F -->|Live 2026 Web Evidence, Dates & Citations| G["3. Bifrost Gateway (by Maxim AI) / Gemini 3.5"]
+    E -->|Direct and Superseding Search| F["Tavily Search Engine (by Nebius)"]
+    F -->|Live 2026 Web Consensus| G["3. Bifrost Gateway (by Maxim AI)"]
     
     G --> H["4. Forensic Contradiction Reasoning"]
-    H --> I1["🚨 Instant Flaw Decryption Matrix (Red Strikethroughs)"]
-    H --> I2["✨ Verified 2026 Ground-Truth Replacement"]
-    H --> I3["⚖️ Side-by-Side Visual Diff Visualizer"]
-    H --> I4["🔊 Web Speech Audio Briefing with Waveform"]
+    H --> I1["Instant Flaw Decryption Matrix"]
+    H --> I2["Verified 2026 Ground-Truth Replacement"]
+    H --> I3["Side-by-Side Visual Diff Visualizer"]
+    H --> I4["Web Speech Audio Briefing Engine"]
     
-    I1 & I2 & I3 & I4 --> J["Conversational Web UI & REST API"]
+    I1 --> J["Conversational Web UI and REST API"]
+    I2 --> J
+    I3 --> J
+    I4 --> J
 ```
 
 ### The 4-Stage Verification Workflow:
