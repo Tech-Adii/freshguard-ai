@@ -13,7 +13,7 @@
 
 **FreshGuard AI** is a production-grade verification layer and middleware SDK that prevents Large Language Models from shipping outdated facts, expired pricing, and deprecated APIs to users. It intercepts LLM outputs, extracts time-sensitive claims, verifies live ground-truth web consensus via **Tavily**, and synthesizes mathematically scored, updated answers via **Bifrost by Maxim AI**.
 
-[Live Web Dashboard](http://localhost:8000) · [Architecture](#-architecture) · [Quickstart](#-quickstart) · [AI Playground](#-interactive-ai-playground) · [Middleware SDK](#-middleware-integration) · [Benchmark Suite](#-benchmark-suite)
+[Live Web Dashboard](http://localhost:8000) · [Watch Demo Video](http://localhost:8000/static/video.html) · [Architecture](#-architecture) · [Quickstart](#-quickstart) · [AI Playground](#-interactive-ai-playground) · [Middleware SDK](#-middleware-integration) · [Benchmark Suite](#-benchmark-suite)
 
 ---
 
