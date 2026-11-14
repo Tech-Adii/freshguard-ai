@@ -243,11 +243,6 @@ code, pre, .font-mono {
     backdrop-filter: blur(12px);
 }
 
-/* Sound Toggle Button */
-.sound-active {
-    color: #06b6d4 !important;
-    border-color: rgba(6, 182, 212, 0.4) !important;
-}
 
 /* Grade Medal Badges */
 .grade-f {

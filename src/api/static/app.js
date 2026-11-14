@@ -1,5 +1,5 @@
 // ==========================================================================
-// FreshGuard AI — Supreme Fact Verification & Temporal Obsolescence Engine
+// FreshGuard AI — Real-Time Fact Verification & Temporal Obsolescence Engine
 // Team SOL CULTURE: Adithya R Kulkarni & Manisha M Kulkarni
 // ==========================================================================
 
@@ -7,74 +7,7 @@ let historyRecords = [];
 let activeFilter = "all";
 let isIncognito = false;
 let isSpeaking = false;
-let sfxEnabled = true;
 const DEFAULT_USER_ID = "user_default";
-
-// --- AUDIO SYNTHESIZER (WEB AUDIO API - ZERO EXTERNAL MP3S) ---
-let audioCtx = null;
-function getAudioContext() {
-    if (!audioCtx && (window.AudioContext || window.webkitAudioContext)) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    return audioCtx;
-}
-
-function playCyberSound(type = "click") {
-    if (!sfxEnabled) return;
-    try {
-        const ctx = getAudioContext();
-        if (!ctx) return;
-        if (ctx.state === "suspended") ctx.resume();
-
-        const now = ctx.currentTime;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        if (type === "click") {
-            osc.type = "sine";
-            osc.frequency.setValueAtTime(880, now);
-            osc.frequency.exponentialRampToValueAtTime(440, now + 0.04);
-            gain.gain.setValueAtTime(0.08, now);
-            gain.gain.linearRampToValueAtTime(0.001, now + 0.04);
-            osc.start(now);
-            osc.stop(now + 0.04);
-        } else if (type === "scan") {
-            osc.type = "sine";
-            osc.frequency.setValueAtTime(320, now);
-            osc.frequency.exponentialRampToValueAtTime(740, now + 0.12);
-            gain.gain.setValueAtTime(0.06, now);
-            gain.gain.linearRampToValueAtTime(0.001, now + 0.12);
-            osc.start(now);
-            osc.stop(now + 0.12);
-        } else if (type === "success") {
-            // Harmonic Chime (E5 + G#5)
-            [659.25, 830.61].forEach((freq, idx) => {
-                const o = ctx.createOscillator();
-                const g = ctx.createGain();
-                o.connect(g);
-                g.connect(ctx.destination);
-                o.type = "sine";
-                o.frequency.setValueAtTime(freq, now + idx * 0.06);
-                g.gain.setValueAtTime(0.08, now + idx * 0.06);
-                g.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
-                o.start(now + idx * 0.06);
-                o.stop(now + 0.45);
-            });
-        } else if (type === "alert") {
-            osc.type = "triangle";
-            osc.frequency.setValueAtTime(240, now);
-            osc.frequency.exponentialRampToValueAtTime(160, now + 0.18);
-            gain.gain.setValueAtTime(0.12, now);
-            gain.gain.linearRampToValueAtTime(0.001, now + 0.18);
-            osc.start(now);
-            osc.stop(now + 0.18);
-        }
-    } catch (e) {
-        // AudioContext fallback
-    }
-}
 
 // --- AMBIENT CANVAS PARTICLE CONSTELLATION ---
 function initBackgroundParticles() {
@@ -148,30 +81,46 @@ document.addEventListener("DOMContentLoaded", () => {
     initBackgroundParticles();
     loadSidebarHistory();
     setupEventListeners();
-    setupApiModal();
+    setupAboutModal();
 });
 
-// --- SETUP EVENT LISTENERS ---
-function setupEventListeners() {
-    // SFX Toggle
-    const sfxBtn = document.getElementById("sfx-toggle-btn");
-    const sfxIcon = document.getElementById("sfx-icon");
-    if (sfxBtn) {
-        sfxBtn.addEventListener("click", () => {
-            sfxEnabled = !sfxEnabled;
-            if (sfxEnabled) {
-                sfxBtn.classList.add("sound-active");
-                if (sfxIcon) sfxIcon.className = "fa-solid fa-volume-high text-[11px]";
-                playCyberSound("click");
-                showToast("Cyber SFX enabled");
-            } else {
-                sfxBtn.classList.remove("sound-active");
-                if (sfxIcon) sfxIcon.className = "fa-solid fa-volume-xmark text-[11px]";
-                showToast("Cyber SFX muted");
-            }
+// --- ABOUT ME MODAL CONTROLS ---
+function setupAboutModal() {
+    const modal = document.getElementById("about-me-modal");
+    const openBtn = document.getElementById("about-me-btn");
+    const sidebarOpenBtn = document.getElementById("sidebar-about-btn");
+    const closeBtn = document.getElementById("close-about-modal");
+    const closeBtnAction = document.getElementById("close-about-btn-action");
+
+    const openModal = () => {
+        if (modal) modal.classList.remove("hidden");
+    };
+
+    const closeModal = () => {
+        if (modal) modal.classList.add("hidden");
+    };
+
+    if (openBtn) openBtn.addEventListener("click", openModal);
+    if (sidebarOpenBtn) sidebarOpenBtn.addEventListener("click", openModal);
+    if (closeBtn) closeBtn.addEventListener("click", closeModal);
+    if (closeBtnAction) closeBtnAction.addEventListener("click", closeModal);
+
+    if (modal) {
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) closeModal();
         });
     }
 
+    // Close on Escape key
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modal && !modal.classList.contains("hidden")) {
+            closeModal();
+        }
+    });
+}
+
+// --- SETUP EVENT LISTENERS ---
+function setupEventListeners() {
     // Sidebar Toggles
     const sidebar = document.getElementById("sidebar");
     const toggleBtn = document.getElementById("sidebar-toggle-btn");
@@ -179,13 +128,11 @@ function setupEventListeners() {
 
     if (toggleBtn) {
         toggleBtn.addEventListener("click", () => {
-            playCyberSound("click");
             sidebar.classList.toggle("collapsed");
         });
     }
     if (mobileToggleBtn) {
         mobileToggleBtn.addEventListener("click", () => {
-            playCyberSound("click");
             sidebar.classList.toggle("collapsed");
         });
     }
@@ -193,26 +140,19 @@ function setupEventListeners() {
     // New Audit button
     const newBtn = document.getElementById("new-audit-btn");
     if (newBtn) {
-        newBtn.addEventListener("click", () => {
-            playCyberSound("click");
-            resetToNewAudit();
-        });
+        newBtn.addEventListener("click", resetToNewAudit);
     }
 
     // Clear feed button
     const clearBtn = document.getElementById("clear-feed-btn");
     if (clearBtn) {
-        clearBtn.addEventListener("click", () => {
-            playCyberSound("click");
-            resetToNewAudit();
-        });
+        clearBtn.addEventListener("click", resetToNewAudit);
     }
 
     // Keyboard shortcut Cmd/Ctrl + K for new audit
     document.addEventListener("keydown", (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
             e.preventDefault();
-            playCyberSound("click");
             resetToNewAudit();
         }
     });
@@ -222,7 +162,6 @@ function setupEventListeners() {
     const incognitoBanner = document.getElementById("incognito-banner");
     if (incognitoInput) {
         incognitoInput.addEventListener("change", (e) => {
-            playCyberSound("click");
             isIncognito = e.target.checked;
             if (isIncognito) {
                 incognitoBanner.classList.remove("hidden");
@@ -245,7 +184,6 @@ function setupEventListeners() {
     // History Filter tabs
     document.querySelectorAll(".hist-filter-btn").forEach(btn => {
         btn.addEventListener("click", () => {
-            playCyberSound("click");
             document.querySelectorAll(".hist-filter-btn").forEach(b => {
                 b.classList.remove("active", "text-white");
                 b.classList.add("text-zinc-400");
@@ -282,7 +220,6 @@ function setupEventListeners() {
     // Quick Chip Click Handlers
     document.querySelectorAll(".quick-chip").forEach(chip => {
         chip.addEventListener("click", () => {
-            playCyberSound("scan");
             const prompt = chip.getAttribute("data-prompt");
             if (chatInput && prompt) {
                 chatInput.value = prompt;
@@ -306,8 +243,6 @@ async function submitAudit() {
         showToast("Please enter at least 5 characters to audit.");
         return;
     }
-
-    playCyberSound("scan");
 
     // Hide welcome state
     if (welcomeState) {
@@ -354,12 +289,6 @@ async function submitAudit() {
         // 3. Append Decrypted FreshGuard Response Bubble
         appendDecryptedAssistantBubble(report);
 
-        if (report.stale_count > 0) {
-            playCyberSound("alert");
-        } else {
-            playCyberSound("success");
-        }
-
         // Update Title
         const titleEl = document.getElementById("current-audit-title");
         if (titleEl) {
@@ -373,7 +302,6 @@ async function submitAudit() {
         clearInterval(thinkInterval);
         thinkingIndicator.classList.add("hidden");
         appendErrorBubble(err.message);
-        playCyberSound("alert");
     } finally {
         if (sendBtn) sendBtn.disabled = false;
     }
@@ -385,9 +313,9 @@ function animateThinkingSteps() {
     const progEl = document.getElementById("thinking-progress");
     const stages = [
         { text: "Extracting atomic claims & calculating temporal volatility...", width: "25%" },
-        { text: "Querying live 2026 web evidence via Tavily...", width: "55%" },
-        { text: "Cross-referencing contradictions via Bifrost Gateway...", width: "80%" },
-        { text: "Synthesizing truth decryption & key takeaways...", width: "95%" }
+        { text: "Querying live 2026 web evidence...", width: "55%" },
+        { text: "Cross-referencing contradictions & reasoning...", width: "80%" },
+        { text: "Synthesizing verified output & key takeaways...", width: "95%" }
     ];
 
     let i = 0;
@@ -444,7 +372,7 @@ function appendDecryptedAssistantBubble(report) {
         scoreColor = "text-rose-400";
         gradeBadge = `<span class="px-2 py-0.5 rounded-md font-mono text-[10px] font-black uppercase grade-f">Grade F · Outdated</span>`;
     } else if (unverifiedClaims.length > 0) {
-        verdictHeadline = `⚠️ PARTIAL CONFIDENCE: Insufficient 2026 Live Web Evidence`;
+        verdictHeadline = `⚠️ PARTIAL CONFIDENCE: Insufficient Live Web Evidence`;
         verdictBg = "bg-amber-500/10";
         verdictBorder = "border-amber-500/35";
         scoreColor = "text-amber-400";
@@ -499,7 +427,7 @@ function appendDecryptedAssistantBubble(report) {
 
                             ${c.evidence && c.evidence.length > 0 ? `
                                 <div class="pt-1 flex items-center space-x-2 text-[10px] text-zinc-400">
-                                    <span class="text-zinc-500 font-mono">Live Proof:</span>
+                                    <span class="text-zinc-500 font-mono">Live Citation:</span>
                                     <a href="${c.evidence[0].url}" target="_blank" class="text-cyan-400 hover:underline truncate max-w-sm font-mono flex items-center space-x-1">
                                         <span>🔗 ${escapeHtml(c.evidence[0].domain)} — "${escapeHtml(c.evidence[0].title)}"</span>
                                     </a>
@@ -518,7 +446,7 @@ function appendDecryptedAssistantBubble(report) {
                     <span>Zero Factual Obsolescence Detected</span>
                 </div>
                 <p class="text-zinc-300 leading-relaxed text-xs">
-                    Every atomic statement was cross-verified against live 2026 web sources via Tavily and reasoned through Bifrost Gateway. All facts are active and current.
+                    Every atomic statement was cross-verified against live 2026 web sources. All facts are active, accurate, and current.
                 </p>
             </div>
         `;
@@ -724,7 +652,6 @@ function appendDecryptedAssistantBubble(report) {
 function animateNumberCount(elementId, target, duration) {
     const el = document.getElementById(elementId);
     if (!el) return;
-    let start = 0;
     const startTime = performance.now();
 
     function update(time) {
@@ -743,7 +670,6 @@ function animateNumberCount(elementId, target, duration) {
 
 // --- TAB SWITCHER FOR REPORT CARD ---
 window.switchReportTab = function(reportId, tabName, btn) {
-    playCyberSound("click");
     const parent = btn.closest('.space-y-4') || btn.parentElement.parentElement;
     parent.querySelectorAll('.tab-btn').forEach(b => {
         b.classList.remove('bg-white/10', 'text-white', 'font-semibold');
@@ -812,95 +738,6 @@ window.toggleVoiceover = function(reportId) {
     showToast("Playing audio briefing...");
 };
 
-// --- DEVELOPER API INTEGRATION MODAL LOGIC ---
-function setupApiModal() {
-    const modal = document.getElementById("api-modal");
-    const openBtn = document.getElementById("api-modal-btn");
-    const closeBtn = document.getElementById("close-api-modal");
-    const doneBtn = document.getElementById("close-api-modal-btn");
-    const copyBtn = document.getElementById("copy-code-btn");
-    const codeEl = document.getElementById("code-snippet-text");
-
-    const snippets = {
-        python: `import requests
-
-res = requests.post(
-    "http://localhost:8000/api/verify",
-    json={
-        "text": "OpenAI flagship model GPT-4 costs $30.00/1M tokens.",
-        "search_depth": "advanced"
-    }
-)
-report = res.json()
-print("Freshness Score:", report["overall_freshness_score"])
-print("Verified 2026 Truth:", report["updated_text"])`,
-        curl: `curl -X POST "http://localhost:8000/api/verify" \\
-  -H "Content-Type: application/json" \\
-  -d '{
-    "text": "OpenAI flagship model GPT-4 costs $30.00/1M tokens.",
-    "search_depth": "advanced"
-  }'`,
-        node: `const res = await fetch("http://localhost:8000/api/verify", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    text: "OpenAI flagship model GPT-4 costs $30.00/1M tokens.",
-    search_depth: "advanced"
-  })
-});
-const report = await res.json();
-console.log(report.overall_freshness_score, report.updated_text);`
-    };
-
-    if (openBtn && modal) {
-        openBtn.addEventListener("click", () => {
-            playCyberSound("click");
-            modal.classList.remove("hidden");
-        });
-    }
-
-    const closeModal = () => {
-        if (modal) {
-            playCyberSound("click");
-            modal.classList.add("hidden");
-        }
-    };
-
-    if (closeBtn) closeBtn.addEventListener("click", closeModal);
-    if (doneBtn) doneBtn.addEventListener("click", closeModal);
-    if (modal) {
-        modal.addEventListener("click", (e) => {
-            if (e.target === modal) closeModal();
-        });
-    }
-
-    document.querySelectorAll(".api-tab-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-            playCyberSound("click");
-            document.querySelectorAll(".api-tab-btn").forEach(b => {
-                b.classList.remove("bg-white/10", "text-white", "font-semibold");
-                b.classList.add("text-zinc-400");
-            });
-            btn.classList.add("bg-white/10", "text-white", "font-semibold");
-            btn.classList.remove("text-zinc-400");
-
-            const lang = btn.getAttribute("data-lang");
-            if (codeEl && snippets[lang]) {
-                codeEl.textContent = snippets[lang];
-            }
-        });
-    });
-
-    if (copyBtn && codeEl) {
-        copyBtn.addEventListener("click", () => {
-            playCyberSound("click");
-            navigator.clipboard.writeText(codeEl.textContent).then(() => {
-                showToast("Copied code snippet to clipboard!");
-            });
-        });
-    }
-}
-
 // --- ERROR BUBBLE ---
 function appendErrorBubble(msg) {
     const wrapper = document.getElementById("messages-wrapper");
@@ -950,7 +787,6 @@ function resetToNewAudit() {
 
 // --- COPY & EXPORT UTILITIES ---
 window.copyVerifiedText = function(reportId) {
-    playCyberSound("click");
     const report = window[reportId];
     if (!report) return;
     navigator.clipboard.writeText(report.updated_text).then(() => {
@@ -959,7 +795,6 @@ window.copyVerifiedText = function(reportId) {
 };
 
 window.copyJsonReport = function(reportId) {
-    playCyberSound("click");
     const report = window[reportId];
     if (!report) return;
     navigator.clipboard.writeText(JSON.stringify(report, null, 2)).then(() => {
@@ -968,7 +803,6 @@ window.copyJsonReport = function(reportId) {
 };
 
 window.exportMarkdown = function(reportId) {
-    playCyberSound("click");
     const report = window[reportId];
     if (!report) return;
 
@@ -1076,7 +910,6 @@ function renderSidebarHistory(searchQuery = "") {
 
 async function loadHistoryItem(historyId) {
     try {
-        playCyberSound("scan");
         const res = await fetch(`/api/history/${historyId}`);
         if (res.ok) {
             const report = await res.json();
@@ -1100,7 +933,6 @@ async function loadHistoryItem(historyId) {
 
 async function toggleStarItem(historyId) {
     try {
-        playCyberSound("click");
         await fetch(`/api/history/${historyId}/star?user_id=${DEFAULT_USER_ID}`, { method: "PUT" });
         loadSidebarHistory();
     } catch (e) {
@@ -1110,7 +942,6 @@ async function toggleStarItem(historyId) {
 
 async function toggleArchiveItem(historyId) {
     try {
-        playCyberSound("click");
         await fetch(`/api/history/${historyId}/archive?user_id=${DEFAULT_USER_ID}`, { method: "PUT" });
         loadSidebarHistory();
     } catch (e) {
@@ -1120,7 +951,6 @@ async function toggleArchiveItem(historyId) {
 
 async function deleteHistoryItem(historyId) {
     try {
-        playCyberSound("click");
         await fetch(`/api/history/${historyId}?user_id=${DEFAULT_USER_ID}`, { method: "DELETE" });
         loadSidebarHistory();
         showToast("Deleted audit record");
