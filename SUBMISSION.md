@@ -87,29 +87,32 @@ Directly solves one of the biggest bottlenecks preventing enterprise LLM adoptio
 AI is used systematically across claim extraction, volatility ranking, temporal contradiction detection, and fact-corrected text generation.
 
 ### 5. User Experience (10/10)
-Clean, minimalist interface inspired by Linear and Vercel. Includes Google authentication, a slide-over history drawer to review past audits, side-by-side diff views, and one-click export to clipboard or JSON.
+Clean, conversational interface inspired by ChatGPT and Claude. Features a collapsible sidebar with live query history, Star ⭐ and Archive 📦 management, in-memory Incognito verification, an interactive "About Me" modal, side-by-side diff views, instant flaw decryption cards, and audio briefing.
 
 ### 6. Scalability and Potential (10/10)
 Designed as a plug-and-play middleware. Can be wrapped around any existing LLM workflow (OpenAI, Anthropic, Gemini, LangChain, LlamaIndex) with a 2-line code snippet.
 
 ---
 
-## 📹 7. Demo Video Script & Walkthrough (2-3 Minutes)
+## 🎯 7. Live Product Walkthrough & Demonstration Guide
 
-* **0:00 - 0:30 | The Problem:**
+* **Stage 1 | The Problem & Temporal Cutoff:**
   "Every AI model generates responses with absolute confidence, but they're trapped behind knowledge cutoff dates. If you ask an LLM about software APIs, pricing plans, or executive leadership, it frequently serves outdated or deprecated information."
-* **0:30 - 1:00 | Introducing FreshGuard AI:**
-  "We built FreshGuard AI, powered by Tavily and Bifrost by Maxim AI. FreshGuard is an automated temporal verification layer that intercepts AI answers, identifies volatile claims, and verifies them against live 2026 web ground truth."
-* **1:00 - 1:45 | Live Demo:**
-  - Paste the OpenAI pricing claim: *"OpenAI's flagship GPT-4 costs $30.00 per 1M prompt tokens."*
+* **Stage 2 | Introducing FreshGuard AI:**
+  "We built FreshGuard AI, powered by Tavily and Bifrost by Maxim AI. FreshGuard is an automated temporal verification layer that intercepts AI answers, isolates volatile claims, and verifies them against live 2026 web ground truth."
+* **Stage 3 | Live Verification Demonstration:**
+  - Enter an outdated claim (e.g., *"OpenAI's flagship GPT-4 costs $30.00 per 1M prompt tokens."* or *"Next.js uses getServerSideProps in the /pages directory."*)
   - Click **Verify Freshness**.
-  - Show the loading pipeline: extracting claims, querying Tavily, evaluating contradictions via Bifrost.
-  - Review the results: **Freshness Score drops to 15% (Stale)**, red strikethrough on $30, green highlight showing current GPT-4o pricing at ~$2.50, and live Tavily source links.
-* **1:45 - 2:15 | Google Auth & History Drawer:**
-  - Show the Google Sign-In profile in the header.
-  - Open the **History** drawer to show previous audits automatically stored in SQLite.
-* **2:15 - 2:30 | Conclusion:**
-  "FreshGuard bridges the gap between frozen model weights and real-time truth. Thank you!"
+  - Review the real-time pipeline: atomic claims extracted, dual-query live web search executed via Tavily, and forensic reasoning performed via Bifrost.
+  - Explore the **Instant Flaw Decryption Matrix**: color-coded cards that pinpoint the exact flaw, why it is outdated, when it was superseded, and live citation links.
+  - Review the radial gauge score (0% Stale) and the side-by-side strikethrough comparison with 2026 ground-truth replacements.
+* **Stage 4 | Conversational Features & Audio Briefing:**
+  - Click **Read Aloud** to hear the animated Web Speech synthesis briefing.
+  - Review the ChatGPT-style sidebar with search, Star, and Archive controls.
+  - Test **Incognito Mode** for private in-memory verifications without database persistence.
+  - Click **About Me** in the header to review project architecture and team attribution.
+* **Stage 5 | Conclusion:**
+  "FreshGuard bridges the gap between frozen model weights and real-time truth. Engineered by Team SOL CULTURE."
 
 ---
 

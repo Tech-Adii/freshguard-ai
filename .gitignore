@@ -7,3 +7,7 @@ hackathon_data.json
 ps6_details.pdf
 node_modules/
 .DS_Store
+*.mp4
+*.webm
+*.mov
+*.avi

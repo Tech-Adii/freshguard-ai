@@ -199,8 +199,7 @@ freshguard-ai/
 │   │   └── static/
 │   │       ├── index.html         # ChatGPT-style dashboard with About Me modal
 │   │       ├── app.js             # Conversational stream, dial animations & TTS
-│   │       ├── style.css          # Dark glassmorphism, glowing badges & diffs
-│   │       └── video.html         # In-browser demo walkthrough player
+│   │       └── style.css          # Dark glassmorphism, glowing badges & diffs
 │   ├── core/
 │   │   ├── claim_extractor.py     # Atomic claim extraction & volatility scoring
 │   │   ├── tavily_verifier.py     # Dual-query live 2026 search via Tavily
@@ -217,7 +216,6 @@ freshguard-ai/
 ├── bifrost/
 │   ├── config.json                # Maxim AI Bifrost provider & routing config
 │   └── docker-compose.yml         # Container configuration for Bifrost
-├── generate_demo_video.py         # 1080p HD automated demo video renderer
 ├── requirements.txt               # Python package dependencies
 ├── run.py                         # Application launcher with hot-reload
 ├── cli.py                         # Command-line verification tool
