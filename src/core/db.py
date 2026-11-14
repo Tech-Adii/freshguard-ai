@@ -25,16 +25,6 @@ def init_db():
                 created_at REAL
             )
         """)
-        # Ensure new columns exist if table was already created
-        try:
-            conn.execute("ALTER TABLE users ADD COLUMN picture TEXT")
-        except Exception:
-            pass
-        try:
-            conn.execute("ALTER TABLE users ADD COLUMN provider TEXT")
-        except Exception:
-            pass
-
         conn.execute("""
             CREATE TABLE IF NOT EXISTS history (
                 id TEXT PRIMARY KEY,
@@ -45,9 +35,22 @@ def init_db():
                 stale_count INTEGER,
                 fresh_count INTEGER,
                 report_json TEXT,
+                is_archived INTEGER DEFAULT 0,
+                is_starred INTEGER DEFAULT 0,
                 created_at REAL
             )
         """)
+        # Ensure new columns exist
+        for col in ["picture TEXT", "provider TEXT"]:
+            try:
+                conn.execute(f"ALTER TABLE users ADD COLUMN {col}")
+            except Exception:
+                pass
+        for col in ["is_archived INTEGER DEFAULT 0", "is_starred INTEGER DEFAULT 0"]:
+            try:
+                conn.execute(f"ALTER TABLE history ADD COLUMN {col}")
+            except Exception:
+                pass
         conn.commit()
 
 init_db()
@@ -56,7 +59,6 @@ def get_or_create_google_user(email: str, name: str, picture: str = "") -> Dict[
     with get_db() as conn:
         row = conn.execute("SELECT id, email, name, picture, provider FROM users WHERE email = ?", (email,)).fetchone()
         if row:
-            # Update picture or name if changed
             conn.execute("UPDATE users SET name = ?, picture = ?, provider = 'google' WHERE email = ?", (name, picture, email))
             conn.commit()
             return {"id": row["id"], "email": email, "name": name, "picture": picture, "provider": "google"}
@@ -70,11 +72,11 @@ def get_or_create_google_user(email: str, name: str, picture: str = "") -> Dict[
         return {"id": user_id, "email": email, "name": name, "picture": picture, "provider": "google"}
 
 def save_history_item(user_id: str, report_dict: Dict[str, Any]) -> str:
-    item_id = f"hist_{uuid.uuid4().hex[:10]}"
+    item_id = f"audit_{uuid.uuid4().hex[:10]}"
     with get_db() as conn:
         conn.execute("""
-            INSERT INTO history (id, user_id, input_text, summary, overall_freshness_score, stale_count, fresh_count, report_json, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO history (id, user_id, input_text, summary, overall_freshness_score, stale_count, fresh_count, report_json, is_archived, is_starred, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?)
         """, (
             item_id,
             user_id,
@@ -89,23 +91,48 @@ def save_history_item(user_id: str, report_dict: Dict[str, Any]) -> str:
         conn.commit()
     return item_id
 
-def get_user_history(user_id: str, limit: int = 25) -> List[Dict[str, Any]]:
+def get_user_history(user_id: str, include_archived: bool = True, limit: int = 50) -> List[Dict[str, Any]]:
     with get_db() as conn:
-        rows = conn.execute("""
-            SELECT id, user_id, input_text, summary, overall_freshness_score, stale_count, fresh_count, created_at
+        query = """
+            SELECT id, user_id, input_text, summary, overall_freshness_score, stale_count, fresh_count, is_archived, is_starred, created_at
             FROM history
             WHERE user_id = ?
-            ORDER BY created_at DESC
-            LIMIT ?
-        """, (user_id, limit)).fetchall()
+        """
+        if not include_archived:
+            query += " AND is_archived = 0"
+        query += " ORDER BY created_at DESC LIMIT ?"
+        rows = conn.execute(query, (user_id, limit)).fetchall()
         return [dict(r) for r in rows]
 
 def get_history_detail(history_id: str) -> Optional[Dict[str, Any]]:
     with get_db() as conn:
-        row = conn.execute("SELECT report_json FROM history WHERE id = ?", (history_id,)).fetchone()
+        row = conn.execute("SELECT report_json, is_archived, is_starred FROM history WHERE id = ?", (history_id,)).fetchone()
         if row:
-            return json.loads(row["report_json"])
+            data = json.loads(row["report_json"])
+            data["is_archived"] = bool(row["is_archived"])
+            data["is_starred"] = bool(row["is_starred"])
+            return data
         return None
+
+def toggle_archive_history(history_id: str, user_id: str) -> bool:
+    with get_db() as conn:
+        row = conn.execute("SELECT is_archived FROM history WHERE id = ? AND user_id = ?", (history_id, user_id)).fetchone()
+        if not row:
+            return False
+        new_state = 0 if row["is_archived"] else 1
+        conn.execute("UPDATE history SET is_archived = ? WHERE id = ? AND user_id = ?", (new_state, history_id, user_id))
+        conn.commit()
+        return bool(new_state)
+
+def toggle_star_history(history_id: str, user_id: str) -> bool:
+    with get_db() as conn:
+        row = conn.execute("SELECT is_starred FROM history WHERE id = ? AND user_id = ?", (history_id, user_id)).fetchone()
+        if not row:
+            return False
+        new_state = 0 if row["is_starred"] else 1
+        conn.execute("UPDATE history SET is_starred = ? WHERE id = ? AND user_id = ?", (new_state, history_id, user_id))
+        conn.commit()
+        return bool(new_state)
 
 def delete_history_item(history_id: str, user_id: str) -> bool:
     with get_db() as conn:

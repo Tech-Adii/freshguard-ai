@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreshGuard — Temporal Verification Layer</title>
+    <title>FreshGuard AI — Conversational Fact Verification</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -14,9 +14,15 @@
                         surface: {
                             50: '#fafafa',
                             100: '#f4f4f5',
+                            700: '#3f3f46',
                             800: '#27272a',
-                            900: '#18181b',
+                            850: '#1e1e22',
+                            900: '#141417',
                             950: '#09090b'
+                        },
+                        brand: {
+                            500: '#6366f1',
+                            600: '#4f46e5'
                         }
                     },
                     fontFamily: {
@@ -30,221 +36,242 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body class="bg-surface-950 text-zinc-100 min-h-screen font-sans antialiased selection:bg-zinc-800 selection:text-white flex flex-col justify-between">
+<body class="bg-surface-950 text-zinc-100 min-h-screen font-sans antialiased flex overflow-hidden selection:bg-zinc-800 selection:text-white">
 
-    <!-- Top Navigation -->
-    <header class="border-b border-zinc-800/80 bg-surface-950/90 backdrop-blur-md sticky top-0 z-40">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-            <!-- Brand -->
-            <div class="flex items-center space-x-3">
-                <div class="w-7 h-7 rounded-lg bg-zinc-800 border border-zinc-700/60 flex items-center justify-center text-zinc-200">
-                    <i class="fa-solid fa-shield-halved text-xs"></i>
+    <!-- ============================================================ -->
+    <!-- LEFT SIDEBAR (CHATGPT / CLAUDE / GEMINI STYLE)               -->
+    <!-- ============================================================ -->
+    <aside id="sidebar" class="w-72 bg-surface-900 border-r border-zinc-800/80 flex flex-col justify-between flex-shrink-0 transition-all duration-300 z-30 select-none">
+        <!-- Top Section -->
+        <div class="p-3.5 space-y-3 flex-shrink-0">
+            <!-- Brand & Sidebar Toggle -->
+            <div class="flex items-center justify-between px-1">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-7 h-7 rounded-lg bg-zinc-800 border border-zinc-700/60 flex items-center justify-center text-zinc-200">
+                        <i class="fa-solid fa-shield-halved text-xs"></i>
+                    </div>
+                    <div>
+                        <span class="text-sm font-bold tracking-tight text-white block">FreshGuard</span>
+                    </div>
                 </div>
+                <button id="sidebar-toggle-btn" class="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-zinc-800 transition-colors" title="Toggle Sidebar">
+                    <i class="fa-solid fa-bars text-xs"></i>
+                </button>
+            </div>
+
+            <!-- New Audit Button -->
+            <button id="new-audit-btn" class="w-full py-2.5 px-3 rounded-xl bg-surface-950 hover:bg-zinc-800 border border-zinc-800/80 hover:border-zinc-700 text-zinc-200 text-xs font-semibold flex items-center justify-between transition-all group shadow-sm">
                 <div class="flex items-center space-x-2">
-                    <span class="text-sm font-semibold tracking-tight text-white">FreshGuard</span>
-                    <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">v2.1</span>
+                    <i class="fa-solid fa-plus text-xs text-indigo-400 group-hover:rotate-90 transition-transform"></i>
+                    <span>New Verification</span>
+                </div>
+                <span class="text-[10px] font-mono text-zinc-500">⌘K</span>
+            </button>
+
+            <!-- Search History Input -->
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-zinc-500 text-[11px]"></i>
+                <input type="text" id="history-search" placeholder="Search audits..." class="w-full bg-surface-950 border border-zinc-800/70 focus:border-zinc-700 rounded-lg pl-8 pr-3 py-1.5 text-xs text-zinc-300 placeholder-zinc-500 outline-none transition-colors">
+            </div>
+
+            <!-- History Filter Tabs -->
+            <div class="flex items-center space-x-1 border-b border-zinc-800/60 pb-2 text-[11px] font-medium text-zinc-400">
+                <button class="hist-filter-btn active px-2.5 py-1 rounded-md text-white bg-zinc-800" data-filter="all">All</button>
+                <button class="hist-filter-btn px-2.5 py-1 rounded-md hover:text-white" data-filter="active">Recent</button>
+                <button class="hist-filter-btn px-2.5 py-1 rounded-md hover:text-white" data-filter="starred">Starred ⭐</button>
+                <button class="hist-filter-btn px-2.5 py-1 rounded-md hover:text-white" data-filter="archived">Archive 📦</button>
+            </div>
+        </div>
+
+        <!-- History Records List (Scrollable) -->
+        <div id="sidebar-history-list" class="flex-grow overflow-y-auto px-3 space-y-1.5 text-xs">
+            <!-- Populated via JS -->
+        </div>
+
+        <!-- Bottom Controls & User Profile -->
+        <div class="p-3 border-t border-zinc-800/80 bg-surface-900/90 space-y-2 flex-shrink-0">
+            <!-- Incognito Toggle -->
+            <div class="flex items-center justify-between p-2 rounded-xl bg-surface-950 border border-zinc-800/70 text-xs">
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm">🕵️</span>
+                    <div>
+                        <span class="text-xs font-semibold text-zinc-300 block">Incognito Audit</span>
+                        <span class="text-[10px] text-zinc-500 block">Do not log to history</span>
+                    </div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="incognito-toggle" class="sr-only peer">
+                    <div class="w-8 h-4 bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600"></div>
+                </label>
+            </div>
+
+            <!-- User Profile Pill -->
+            <div class="flex items-center justify-between p-2 rounded-xl bg-surface-950 border border-zinc-800/70">
+                <div class="flex items-center space-x-2.5 overflow-hidden">
+                    <img id="sidebar-user-avatar" src="https://api.dicebear.com/7.x/initials/svg?seed=Adithya" alt="Avatar" class="w-8 h-8 rounded-full border border-zinc-700 object-cover flex-shrink-0">
+                    <div class="truncate">
+                        <span id="sidebar-user-name" class="text-xs font-bold text-zinc-100 block truncate">Adithya R Kulkarni</span>
+                        <span class="text-[10px] font-mono text-indigo-400 block truncate">Team SOL CULTURE</span>
+                    </div>
+                </div>
+                <button id="google-auth-btn" class="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-zinc-800 transition-colors" title="Google Account">
+                    <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ============================================================ -->
+    <!-- MAIN WORKSPACE & CHAT CONVERSATION STREAM                    -->
+    <!-- ============================================================ -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden bg-surface-950 relative">
+
+        <!-- Top Header Navigation Bar -->
+        <header class="h-14 border-b border-zinc-800/80 bg-surface-950/80 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between flex-shrink-0 z-20">
+            <div class="flex items-center space-x-3">
+                <button id="mobile-sidebar-toggle" class="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-zinc-800 sm:hidden">
+                    <i class="fa-solid fa-bars text-sm"></i>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs font-semibold text-zinc-300">FreshGuard AI</span>
+                    <span class="text-zinc-600">/</span>
+                    <span id="current-audit-title" class="text-xs text-zinc-400 truncate max-w-xs">New Audit Session</span>
                 </div>
             </div>
 
-            <!-- Controls -->
-            <div class="flex items-center space-x-3 text-xs">
+            <!-- Top Actions -->
+            <div class="flex items-center space-x-2 text-xs">
                 <!-- System Status -->
-                <div class="hidden sm:flex items-center space-x-2 px-2.5 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-400">
+                <div class="hidden sm:flex items-center space-x-1.5 px-2.5 py-1 rounded-md bg-surface-900 border border-zinc-800 text-[11px] font-mono text-zinc-400">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                    <span class="text-[11px] font-mono">Tavily Engine Active</span>
+                    <span>Tavily + Bifrost Active</span>
                 </div>
 
-                <!-- Demo Video Link -->
-                <a href="/static/video.html" class="px-2.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-300 transition-colors flex items-center space-x-1.5">
-                    <i class="fa-solid fa-circle-play text-indigo-400 text-xs"></i>
-                    <span>Demo Video</span>
-                </a>
-
-                <!-- History Trigger -->
-                <button id="open-history-btn" class="px-2.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-300 transition-colors flex items-center space-x-1.5">
-                    <i class="fa-regular fa-clock text-zinc-400 text-xs"></i>
-                    <span>History</span>
-                    <span id="history-badge" class="px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-400 text-[10px] font-mono">0</span>
+                <!-- Voice Over Play Demo Button -->
+                <button id="voice-demo-btn" class="px-3 py-1.5 rounded-lg bg-surface-900 hover:bg-zinc-800 border border-zinc-800 text-indigo-300 hover:text-indigo-200 text-xs font-medium flex items-center space-x-1.5 transition-colors">
+                    <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+                    <span>Run Voice Walkthrough</span>
                 </button>
 
-                <!-- Google Authentication -->
-                <div id="google-auth-wrapper">
-                    <!-- Signed Out Button -->
-                    <button id="google-sign-in-btn" class="px-3 py-1.5 rounded-lg bg-white hover:bg-zinc-100 text-zinc-900 font-medium text-xs transition-colors flex items-center space-x-2 shadow-sm">
-                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
-                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                        </svg>
-                        <span>Sign in with Google</span>
+                <!-- Demo Video Page Link -->
+                <a href="/static/video.html" class="px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-white text-zinc-950 text-xs font-semibold flex items-center space-x-1.5 transition-colors shadow-sm">
+                    <i class="fa-solid fa-circle-play text-xs"></i>
+                    <span class="hidden sm:inline">Demo Video</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Incognito Banner (Shown when active) -->
+        <div id="incognito-banner" class="hidden bg-indigo-950/60 border-b border-indigo-500/30 px-4 py-1.5 text-center text-xs text-indigo-300 flex items-center justify-center space-x-2 font-mono">
+            <span>🕵️ Incognito Mode Active: Audits are processed in memory and not logged to database.</span>
+        </div>
+
+        <!-- Chat / Audit Stream (Scrollable) -->
+        <div id="chat-stream" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+
+            <!-- Welcome Empty State (Shown initially) -->
+            <div id="welcome-state" class="max-w-2xl mx-auto text-center py-12 space-y-6">
+                <div class="w-14 h-14 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mx-auto text-zinc-200 shadow-md">
+                    <i class="fa-solid fa-shield-halved text-2xl text-indigo-400"></i>
+                </div>
+                <div class="space-y-2">
+                    <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">How can FreshGuard protect your claims?</h1>
+                    <p class="text-xs sm:text-sm text-zinc-400 max-w-lg mx-auto leading-relaxed">
+                        Audit any AI response for temporal obsolescence. Cross-checks live 2026 web ground-truth via <strong>Tavily</strong> and reasons through <strong>Bifrost Gateway</strong>.
+                    </p>
+                </div>
+
+                <!-- Quick Action Prompt Chips -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left pt-2">
+                    <button class="quick-chip p-3 rounded-xl bg-surface-900 border border-zinc-800 hover:border-zinc-700 hover:bg-surface-850 transition-all text-xs space-y-1 text-left" data-prompt="OpenAI's flagship GPT-4 model costs $30.00 per 1M prompt tokens and $60.00 per 1M completion tokens.">
+                        <span class="font-semibold text-white flex items-center">
+                            <i class="fa-solid fa-tags text-indigo-400 mr-2"></i> Audit OpenAI Pricing
+                        </span>
+                        <p class="text-zinc-500 text-[11px] truncate">Check if GPT-4 $30/1M rate has been superseded...</p>
                     </button>
 
-                    <!-- Signed In Profile -->
-                    <div id="google-profile-view" class="hidden flex items-center space-x-2">
-                        <img id="user-avatar" src="" alt="Google Profile" class="w-6 h-6 rounded-full border border-zinc-700 object-cover">
-                        <span id="user-name" class="font-medium text-zinc-300 text-xs hidden sm:inline max-w-[120px] truncate">User</span>
-                        <button id="google-sign-out-btn" title="Sign Out" class="p-1 text-zinc-500 hover:text-zinc-200 transition-colors">
-                            <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
-                        </button>
+                    <button class="quick-chip p-3 rounded-xl bg-surface-900 border border-zinc-800 hover:border-zinc-700 hover:bg-surface-850 transition-all text-xs space-y-1 text-left" data-prompt="To build server-side rendered pages in Next.js, create files inside /pages and export getServerSideProps.">
+                        <span class="font-semibold text-white flex items-center">
+                            <i class="fa-brands fa-react text-indigo-400 mr-2"></i> Next.js Framework API
+                        </span>
+                        <p class="text-zinc-500 text-[11px] truncate">Audit Pages router vs modern App Router...</p>
+                    </button>
+
+                    <button class="quick-chip p-3 rounded-xl bg-surface-900 border border-zinc-800 hover:border-zinc-700 hover:bg-surface-850 transition-all text-xs space-y-1 text-left" data-prompt="Parag Agrawal is currently the Chief Executive Officer of Twitter, leading product and engineering.">
+                        <span class="font-semibold text-white flex items-center">
+                            <i class="fa-solid fa-user-tie text-indigo-400 mr-2"></i> Twitter / X Leadership
+                        </span>
+                        <p class="text-zinc-500 text-[11px] truncate">Check executive turnover and platform rebrands...</p>
+                    </button>
+
+                    <button class="quick-chip p-3 rounded-xl bg-surface-900 border border-zinc-800 hover:border-zinc-700 hover:bg-surface-850 transition-all text-xs space-y-1 text-left" data-prompt="The speed of light in a vacuum is exactly 299,792,458 meters per second.">
+                        <span class="font-semibold text-white flex items-center">
+                            <i class="fa-solid fa-atom text-indigo-400 mr-2"></i> Evergreen Physics Law
+                        </span>
+                        <p class="text-zinc-500 text-[11px] truncate">Confirm zero decay on fundamental physical constants...</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Audit Stream Container (Appends dynamically) -->
+            <div id="messages-wrapper" class="max-w-3xl mx-auto space-y-6"></div>
+
+            <!-- Loading Thinking State (Hidden initially) -->
+            <div id="thinking-indicator" class="hidden max-w-3xl mx-auto flex space-x-3 text-xs">
+                <div class="w-7 h-7 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center flex-shrink-0 text-indigo-400">
+                    <i class="fa-solid fa-shield-halved text-xs"></i>
+                </div>
+                <div class="bg-surface-900 border border-zinc-800 rounded-2xl p-4 space-y-2 flex-grow">
+                    <div class="flex items-center space-x-2 text-indigo-400 font-mono">
+                        <i class="fa-solid fa-circle-notch fa-spin text-xs"></i>
+                        <span id="thinking-stage-text">Deconstructing atomic statements...</span>
+                    </div>
+                    <div class="w-full bg-surface-950 rounded-full h-1 overflow-hidden">
+                        <div id="thinking-progress" class="bg-indigo-500 h-full w-16 transition-all duration-300"></div>
                     </div>
                 </div>
             </div>
-        </div>
-    </header>
 
-    <!-- Main Workspace -->
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 w-full space-y-8 flex-grow">
-
-        <!-- Header Intro -->
-        <div class="space-y-2">
-            <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight text-white">Temporal Fact Verification</h1>
-            <p class="text-sm text-zinc-400 leading-relaxed max-w-2xl">
-                Audit LLM outputs against live web consensus. Identifies time-decaying claims across software APIs, pricing, leadership, and regulations.
-            </p>
         </div>
 
-        <!-- Input Box -->
-        <div class="bg-surface-900 border border-zinc-800 rounded-xl p-4 sm:p-5 shadow-sm space-y-4">
-            <div class="space-y-1.5">
-                <div class="flex items-center justify-between text-xs text-zinc-400">
-                    <span class="font-medium">Input Response</span>
-                    <span id="char-counter" class="font-mono text-[11px] text-zinc-500">0 characters</span>
-                </div>
-                <textarea 
-                    id="input-text" 
-                    rows="5" 
-                    placeholder="Paste an AI-generated statement, code explanation, pricing claim, or factual response..."
-                    class="w-full bg-surface-950 border border-zinc-800 focus:border-zinc-600 focus:ring-1 focus:ring-zinc-600 rounded-lg p-3.5 text-zinc-200 placeholder-zinc-600 text-sm outline-none transition-all resize-y font-normal leading-relaxed"
-                ></textarea>
-            </div>
+        <!-- Sticky Bottom Input Dock (ChatGPT / Claude / Gemini Style) -->
+        <div class="border-t border-zinc-800/80 bg-surface-950/95 backdrop-blur-md p-3 sm:p-4 flex-shrink-0 z-20">
+            <div class="max-w-3xl mx-auto space-y-2">
+                <!-- Textarea Card -->
+                <div class="relative bg-surface-900 border border-zinc-800 focus-within:border-zinc-600 rounded-2xl p-2.5 transition-all shadow-md">
+                    <textarea 
+                        id="chat-input" 
+                        rows="2" 
+                        placeholder="Paste an AI-generated statement, API method, pricing claim, or executive to audit..."
+                        class="w-full bg-transparent text-zinc-100 placeholder-zinc-500 text-xs sm:text-sm outline-none resize-none leading-relaxed px-2 py-1 max-h-32"
+                    ></textarea>
 
-            <div class="flex items-center justify-between pt-1 text-xs">
-                <div class="flex items-center space-x-2 text-zinc-400">
-                    <label class="flex items-center space-x-1.5 cursor-pointer">
-                        <input type="checkbox" id="deep-search-toggle" checked class="rounded bg-surface-950 border-zinc-800 text-zinc-100 focus:ring-0">
-                        <span>Deep Web Consensus</span>
-                    </label>
-                </div>
-
-                <div class="flex items-center space-x-2.5">
-                    <button id="clear-btn" class="px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors font-medium">
-                        Clear
-                    </button>
-                    <button id="verify-btn" class="px-4 py-2 rounded-lg bg-zinc-100 hover:bg-white text-zinc-950 font-semibold transition-all flex items-center space-x-2 disabled:opacity-50">
-                        <i class="fa-solid fa-play text-[10px]"></i>
-                        <span id="verify-btn-text">Verify Freshness</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Minimalist Loading Indicator -->
-        <div id="loading-state" class="hidden bg-surface-900 border border-zinc-800 rounded-xl p-6 text-center space-y-4">
-            <div class="flex items-center justify-center space-x-2 text-xs font-mono text-zinc-300">
-                <i class="fa-solid fa-circle-notch fa-spin text-zinc-400"></i>
-                <span id="loading-message">Analyzing claims...</span>
-            </div>
-            <!-- Clean Linear Progress Line -->
-            <div class="w-full max-w-xs mx-auto bg-surface-950 rounded-full h-1 overflow-hidden border border-zinc-800">
-                <div id="loading-bar" class="bg-zinc-200 h-full w-12 transition-all duration-300"></div>
-            </div>
-        </div>
-
-        <!-- Verification Results -->
-        <div id="results-container" class="hidden space-y-6">
-
-            <!-- Executive Summary Card -->
-            <div class="bg-surface-900 border border-zinc-800 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
-                <div class="flex items-center space-x-4">
-                    <!-- Score Meter -->
-                    <div class="w-14 h-14 rounded-xl bg-surface-950 border border-zinc-800 flex flex-col items-center justify-center flex-shrink-0">
-                        <span id="score-text" class="text-lg font-bold text-white font-mono">--</span>
-                        <span class="text-[9px] uppercase font-mono text-zinc-500">Score</span>
-                    </div>
-
-                    <div class="space-y-1">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-sm font-semibold text-white">Verification Status</span>
-                            <span id="score-badge" class="text-[10px] px-2 py-0.5 rounded font-mono font-medium uppercase">--</span>
+                    <!-- Bottom Bar of Input -->
+                    <div class="flex items-center justify-between pt-1.5 px-2 border-t border-zinc-800/50 text-xs">
+                        <div class="flex items-center space-x-2 text-zinc-400">
+                            <label class="flex items-center space-x-1.5 cursor-pointer text-[11px]">
+                                <input type="checkbox" id="deep-search-dock" checked class="rounded bg-surface-950 border-zinc-800 text-indigo-600 focus:ring-0">
+                                <span>Deep Tavily Live Search</span>
+                            </label>
                         </div>
-                        <p id="summary-text" class="text-xs text-zinc-400 leading-relaxed max-w-lg">--</p>
+
+                        <div class="flex items-center space-x-2">
+                            <span class="text-[10px] font-mono text-zinc-500 hidden sm:inline">Enter to verify · Shift+Enter for newline</span>
+                            <button id="send-btn" class="w-8 h-8 rounded-xl bg-zinc-100 hover:bg-white text-zinc-950 flex items-center justify-center transition-all disabled:opacity-40">
+                                <i class="fa-solid fa-arrow-up text-xs"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Export Controls -->
-                <div class="flex items-center space-x-2 flex-shrink-0">
-                    <button id="copy-text-btn" class="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-medium transition-colors flex items-center space-x-1.5">
-                        <i class="fa-regular fa-copy text-zinc-400"></i>
-                        <span>Copy Output</span>
-                    </button>
-                    <button id="copy-json-btn" class="px-3 py-1.5 rounded-lg bg-surface-950 border border-zinc-800 hover:border-zinc-700 text-zinc-400 hover:text-zinc-200 text-xs font-mono transition-colors">
-                        JSON
-                    </button>
+                <!-- Footer Credits -->
+                <div class="text-center text-[10px] font-mono text-zinc-500 pt-1">
+                    THE PROJECT BY <strong class="text-zinc-300">ADITHYA R KULKARNI</strong> AND <strong class="text-zinc-300">MANISHA M KULKARNI</strong> | TEAM <strong class="text-indigo-400">SOL CULTURE</strong>
                 </div>
             </div>
-
-            <!-- Side-by-Side Diff -->
-            <div class="bg-surface-900 border border-zinc-800 rounded-xl p-5 space-y-3">
-                <div class="flex items-center justify-between text-xs text-zinc-400">
-                    <span class="font-medium">Side-by-Side Comparison</span>
-                    <span class="font-mono text-[11px] text-zinc-500">Strikethrough = Outdated Claims</span>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
-                    <div class="bg-surface-950 border border-zinc-800 rounded-lg p-4 space-y-2">
-                        <span class="text-[10px] uppercase font-semibold text-red-400/90 tracking-wider block">Original Input</span>
-                        <div id="diff-original-box" class="text-zinc-300 leading-relaxed whitespace-pre-wrap font-sans">--</div>
-                    </div>
-
-                    <div class="bg-surface-950 border border-zinc-800 rounded-lg p-4 space-y-2">
-                        <span class="text-[10px] uppercase font-semibold text-emerald-400/90 tracking-wider block">Verified Output</span>
-                        <div id="diff-updated-box" class="text-zinc-100 leading-relaxed whitespace-pre-wrap font-sans">--</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Granular Claims & Citations -->
-            <div class="space-y-3">
-                <span class="text-xs font-medium text-zinc-400">Claims Breakdown</span>
-                <div id="claims-list" class="space-y-2.5">
-                    <!-- Dynamic claim cards -->
-                </div>
-            </div>
-
         </div>
 
     </main>
-
-    <!-- Slide-Over History Drawer -->
-    <div id="history-drawer-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden transition-opacity duration-200">
-        <div id="history-drawer" class="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-surface-950 border-l border-zinc-800 shadow-xl p-5 flex flex-col justify-between transform translate-x-full transition-transform duration-200">
-            <div class="space-y-4">
-                <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
-                    <span class="text-sm font-semibold text-white">Verification History</span>
-                    <button id="close-history-btn" class="p-1 text-zinc-400 hover:text-white">
-                        <i class="fa-solid fa-xmark text-sm"></i>
-                    </button>
-                </div>
-                <div id="history-items-container" class="space-y-2 overflow-y-auto max-h-[calc(100vh-140px)] pr-1">
-                    <!-- Dynamic records -->
-                </div>
-            </div>
-
-            <div class="border-t border-zinc-800 pt-3 flex items-center justify-between text-xs">
-                <span id="history-count-text" class="text-zinc-500 font-mono">0 items</span>
-                <button id="clear-history-btn" class="text-red-400 hover:text-red-300 font-medium">Clear All</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="border-t border-zinc-800/80 py-4 text-center text-xs text-zinc-500">
-        <div class="max-w-5xl mx-auto px-4 flex items-center justify-between">
-            <span>FreshGuard AI</span>
-            <span>Powered by Tavily Live Search & Bifrost Gateway</span>
-        </div>
-    </footer>
 
     <script src="/static/app.js"></script>
 </body>

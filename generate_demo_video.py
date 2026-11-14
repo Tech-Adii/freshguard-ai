@@ -78,7 +78,8 @@ def render_scene_1(out, duration_sec=7):
         draw.text((WIDTH//2 + 40, 620), "⚡ Maxim AI Bifrost Gateway", fill=INDIGO, font=font_bold)
 
         # Bottom Subtitle
-        draw.text((WIDTH//2 - 240, 950), "Geek Room Global AI Hackathon · PS 06", fill=TEXT_MUTED, font=font_mono)
+        draw.text((WIDTH//2 - 400, 930), "THE PROJECT BY ADITHYA R KULKARNI AND MANISHA M KULKARNI", fill=TEXT_WHITE, font=font_bold)
+        draw.text((WIDTH//2 - 200, 970), "TEAM SOL CULTURE · GEEK ROOM 2026", fill=INDIGO, font=font_mono)
 
         frame = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
         out.write(frame)
@@ -220,9 +221,13 @@ def render_scene_4(out, duration_sec=8):
         draw.text((WIDTH//2 - 380, 600), "✓ 100% Accuracy on Real-World Stale Benchmark Suite", fill=TEXT_WHITE, font=font_bold)
         draw.text((WIDTH//2 - 380, 650), "✓ 2-Line Middleware Integration for Any AI Agent", fill=TEXT_WHITE, font=font_bold)
 
+        # Team Credits
+        draw.text((WIDTH//2 - 380, 720), "THE PROJECT BY ADITHYA R KULKARNI AND MANISHA M KULKARNI", fill=TEXT_WHITE, font=font_bold)
+        draw.text((WIDTH//2 - 160, 755), "TEAM SOL CULTURE", fill=INDIGO, font=font_mono)
+
         # GitHub Link Box
-        draw.rounded_rectangle([WIDTH//2 - 350, 780, WIDTH//2 + 350, 860], radius=16, fill=(20, 24, 38), outline=INDIGO, width=2)
-        draw.text((WIDTH//2 - 310, 805), "GitHub: github.com/Tech-Adii/freshguard-ai", fill=TEXT_WHITE, font=font_bold)
+        draw.rounded_rectangle([WIDTH//2 - 350, 800, WIDTH//2 + 350, 870], radius=16, fill=(20, 24, 38), outline=INDIGO, width=2)
+        draw.text((WIDTH//2 - 310, 825), "GitHub: github.com/Tech-Adii/freshguard-ai", fill=TEXT_WHITE, font=font_bold)
 
         frame = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
         out.write(frame)
