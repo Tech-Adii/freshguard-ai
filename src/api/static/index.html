@@ -16,9 +16,9 @@
                             50: '#fafafa',
                             100: '#f4f4f5',
                             700: '#333846',
-                            800: '#1e2230',
-                            850: '#141824',
-                            900: '#0d101a',
+                            800: '#1a1e2d',
+                            850: '#131623',
+                            900: '#0c0f1a',
                             950: '#07080c'
                         },
                         cyber: {
@@ -40,7 +40,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body class="bg-surface-950 text-zinc-100 min-h-screen font-sans antialiased flex overflow-hidden selection:bg-cyan-500/20 selection:text-cyan-200 relative">
+<body class="bg-surface-950 text-zinc-100 min-h-screen font-sans antialiased flex overflow-hidden selection:bg-cyan-500/25 selection:text-cyan-200 relative">
+
+    <!-- Interactive Ambient Particles Canvas -->
+    <canvas id="bg-canvas"></canvas>
 
     <!-- Ambient Cyber Grid Backdrop -->
     <div class="cyber-backdrop"></div>
@@ -52,7 +55,7 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- LEFT SIDEBAR (CONVERSATIONAL INTELLIGENCE DOCK)               -->
+    <!-- LEFT SIDEBAR (INTELLIGENCE DOCK & HISTORY MANAGER)           -->
     <!-- ============================================================ -->
     <aside id="sidebar" class="w-80 bg-surface-900/90 backdrop-blur-xl border-r border-white/5 flex flex-col justify-between flex-shrink-0 transition-all duration-300 z-30 select-none relative">
         
@@ -62,7 +65,7 @@
             <div class="flex items-center justify-between px-1">
                 <div class="flex items-center space-x-3">
                     <!-- High-Tech Animated FreshGuard Icon -->
-                    <div class="w-9 h-9 rounded-xl bg-surface-950 border border-cyan-500/30 flex items-center justify-center p-1 shadow-lg shadow-cyan-500/10">
+                    <div class="w-9 h-9 rounded-xl bg-surface-950 border border-cyan-500/35 flex items-center justify-center p-1 shadow-lg shadow-cyan-500/10">
                         <svg class="w-7 h-7" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <defs>
                                 <linearGradient id="sb-shield-grad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -72,15 +75,15 @@
                                 </linearGradient>
                             </defs>
                             <circle cx="20" cy="20" r="18" stroke="url(#sb-shield-grad)" stroke-width="1.5" stroke-dasharray="4 2" class="fg-spin-slow" opacity="0.7"/>
-                            <path d="M20 5L31 9.5V18C31 25.5 26.2 32.2 20 35C13.8 32.2 9 25.5 9 18V9.5L20 5Z" fill="#0d101a" stroke="url(#sb-shield-grad)" stroke-width="2"/>
+                            <path d="M20 5L31 9.5V18C31 25.5 26.2 32.2 20 35C13.8 32.2 9 25.5 9 18V9.5L20 5Z" fill="#0c0f1a" stroke="url(#sb-shield-grad)" stroke-width="2"/>
                             <circle cx="20" cy="20" r="5" stroke="#06b6d4" stroke-width="1" class="fg-pulse-core" opacity="0.8"/>
                             <path d="M16 19.5L18.8 22.3L24.5 16.5" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </div>
                     <div>
                         <div class="flex items-center space-x-1.5">
-                            <span class="text-sm font-extrabold tracking-tight text-white">FreshGuard</span>
-                            <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-cyan-500/15 border border-cyan-500/30 text-cyan-300">AI</span>
+                            <span class="text-sm font-black tracking-tight text-white">FreshGuard</span>
+                            <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-cyan-500/15 border border-cyan-500/30 text-cyan-300">AI 3.5</span>
                         </div>
                         <span class="text-[10px] font-mono text-zinc-400 block">Fact Verification Engine</span>
                     </div>
@@ -94,7 +97,7 @@
             <button id="new-audit-btn" class="w-full py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-cyan-500/10 via-indigo-500/10 to-transparent hover:from-cyan-500/20 hover:via-indigo-500/20 border border-cyan-500/25 hover:border-cyan-400/50 text-white text-xs font-semibold flex items-center justify-between transition-all group shadow-sm">
                 <div class="flex items-center space-x-2.5">
                     <i class="fa-solid fa-plus text-xs text-cyan-400 group-hover:rotate-90 transition-transform duration-200"></i>
-                    <span>New Audit Session</span>
+                    <span>New Verification</span>
                 </div>
                 <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-zinc-400">⌘K</span>
             </button>
@@ -102,7 +105,7 @@
             <!-- Search History Input -->
             <div class="relative">
                 <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-zinc-500 text-[11px]"></i>
-                <input type="text" id="history-search" placeholder="Search past audits..." class="w-full bg-surface-950/80 border border-white/10 focus:border-cyan-500/50 rounded-xl pl-9 pr-3 py-2 text-xs text-zinc-200 placeholder-zinc-500 outline-none transition-all">
+                <input type="text" id="history-search" placeholder="Filter audit library..." class="w-full bg-surface-950/80 border border-white/10 focus:border-cyan-500/50 rounded-xl pl-9 pr-3 py-2 text-xs text-zinc-200 placeholder-zinc-500 outline-none transition-all">
             </div>
 
             <!-- History Filter Tabs -->
@@ -136,10 +139,10 @@
                 </label>
             </div>
 
-            <!-- Project Team Profile Card (Direct Model Mode - No Login Barrier) -->
-            <div class="p-2.5 rounded-xl bg-surface-900/90 border border-white/5 flex items-center justify-between">
+            <!-- Permanent Team Attribution Card -->
+            <div class="p-2.5 rounded-xl bg-surface-900/90 border border-cyan-500/20 flex items-center justify-between shadow-lg">
                 <div class="flex items-center space-x-2.5 overflow-hidden">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs flex-shrink-0 shadow-md">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white font-black text-xs flex-shrink-0 shadow-md">
                         SC
                     </div>
                     <div class="truncate">
@@ -159,7 +162,7 @@
     <!-- ============================================================ -->
     <main class="flex-1 flex flex-col h-screen overflow-hidden bg-surface-950 relative z-10">
 
-        <!-- Top Header Navigation Bar (Super Clean & Focused) -->
+        <!-- Top Header Navigation Bar -->
         <header class="h-14 border-b border-white/5 bg-surface-950/80 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between flex-shrink-0 z-20">
             <div class="flex items-center space-x-3">
                 <button id="mobile-sidebar-toggle" class="p-2 text-zinc-400 hover:text-white rounded-lg hover:bg-white/5 sm:hidden">
@@ -168,26 +171,38 @@
                 <div class="flex items-center space-x-2">
                     <span class="text-xs font-bold text-white">FreshGuard AI</span>
                     <span class="text-zinc-600">/</span>
-                    <span id="current-audit-title" class="text-xs text-zinc-400 truncate max-w-sm">Live Verification Terminal</span>
+                    <span id="current-audit-title" class="text-xs text-zinc-400 truncate max-w-sm">Verification Terminal</span>
                 </div>
             </div>
 
-            <!-- Engine Telemetry Indicators -->
+            <!-- Top Actions & Telemetry -->
             <div class="flex items-center space-x-2 text-xs">
+                <!-- Sound Effects Audio Synthesizer Toggle -->
+                <button id="sfx-toggle-btn" class="sound-active px-2.5 py-1.5 rounded-lg bg-surface-900 border border-cyan-500/40 text-cyan-300 text-xs font-medium flex items-center space-x-1.5 transition-all" title="Toggle UI sound effects">
+                    <i class="fa-solid fa-volume-high text-[11px]" id="sfx-icon"></i>
+                    <span class="hidden md:inline text-[11px] font-mono">Cyber SFX</span>
+                </button>
+
+                <!-- Developer API Integration Drawer Toggle -->
+                <button id="api-modal-btn" class="px-2.5 py-1.5 rounded-lg bg-surface-900 hover:bg-white/5 border border-white/10 text-zinc-300 hover:text-white text-xs font-medium flex items-center space-x-1.5 transition-colors" title="View Developer Integration API">
+                    <i class="fa-solid fa-code text-[11px] text-cyan-400"></i>
+                    <span class="hidden md:inline text-[11px] font-mono">&lt;/&gt; API</span>
+                </button>
+
                 <!-- Tavily Live Indicator -->
                 <div class="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-surface-900 border border-white/5 text-[11px] font-mono text-zinc-300">
                     <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                    <span class="hidden sm:inline">Tavily Live Web 2026</span>
+                    <span class="hidden sm:inline">Tavily Live Web</span>
                 </div>
 
-                <!-- Bifrost/Gemini Indicator -->
+                <!-- Bifrost/Gemini Gateway Indicator -->
                 <div class="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-surface-900 border border-white/5 text-[11px] font-mono text-zinc-300">
                     <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                    <span class="hidden sm:inline">Gateway Reasoning Active</span>
+                    <span class="hidden sm:inline">Bifrost Gateway</span>
                 </div>
 
-                <!-- Clear Session Button -->
-                <button id="clear-feed-btn" class="p-1.5 px-2.5 rounded-lg bg-surface-900 hover:bg-white/5 border border-white/5 text-zinc-400 hover:text-white text-xs font-medium transition-colors" title="Clear current view">
+                <!-- Clear Feed Button -->
+                <button id="clear-feed-btn" class="p-1.5 px-2.5 rounded-lg bg-surface-900 hover:bg-white/5 border border-white/5 text-zinc-400 hover:text-white text-xs font-medium transition-colors" title="Reset View">
                     <i class="fa-solid fa-arrows-rotate text-xs"></i>
                 </button>
             </div>
@@ -195,18 +210,18 @@
 
         <!-- Incognito Banner (Shown when active) -->
         <div id="incognito-banner" class="hidden bg-cyan-950/60 border-b border-cyan-500/30 px-4 py-1.5 text-center text-xs text-cyan-300 flex items-center justify-center space-x-2 font-mono">
-            <span>🕵️ Incognito Mode Active: Audits run entirely in-memory with zero database logging.</span>
+            <span>🕵️ Incognito Mode Active: In-memory audit only, zero database persistence.</span>
         </div>
 
         <!-- Chat / Audit Stream (Scrollable) -->
         <div id="chat-stream" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
 
             <!-- Welcome Empty State (Shown initially) -->
-            <div id="welcome-state" class="max-w-2xl mx-auto text-center py-10 space-y-6">
+            <div id="welcome-state" class="max-w-3xl mx-auto text-center py-8 space-y-6">
                 <!-- Large Animated FreshGuard Shield -->
                 <div class="relative w-20 h-20 mx-auto flex items-center justify-center">
-                    <div class="absolute inset-0 rounded-3xl bg-cyan-500/10 blur-xl"></div>
-                    <div class="relative w-20 h-20 rounded-2xl bg-surface-900 border border-cyan-500/30 flex items-center justify-center shadow-2xl p-2.5">
+                    <div class="absolute inset-0 rounded-3xl bg-cyan-500/15 blur-2xl"></div>
+                    <div class="relative w-20 h-20 rounded-2xl bg-surface-900 border border-cyan-500/35 flex items-center justify-center shadow-2xl p-2.5">
                         <svg class="w-full h-full" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <defs>
                                 <linearGradient id="wel-shield-grad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -216,51 +231,77 @@
                                 </linearGradient>
                             </defs>
                             <circle cx="20" cy="20" r="18" stroke="url(#wel-shield-grad)" stroke-width="1.5" stroke-dasharray="4 2" class="fg-spin-slow" opacity="0.6"/>
-                            <path d="M20 5L31 9.5V18C31 25.5 26.2 32.2 20 35C13.8 32.2 9 25.5 9 18V9.5L20 5Z" fill="#0d101a" stroke="url(#wel-shield-grad)" stroke-width="2"/>
-                            <circle cx="20" cy="20" r="6" stroke="#06b6d4" stroke-width="1" class="fg-pulse-core" opacity="0.8"/>
+                            <path d="M20 5L31 9.5V18C31 25.5 26.2 32.2 20 35C13.8 32.2 9 25.5 9 18V9.5L20 5Z" fill="#0c0f1a" stroke="url(#wel-shield-grad)" stroke-width="2"/>
+                            <circle cx="20" cy="20" r="6" stroke="#06b6d4" stroke-width="1" class="fg-pulse-core" opacity="0.85"/>
                             <path d="M16 19.5L18.8 22.3L24.5 16.5" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </div>
                 </div>
 
                 <div class="space-y-2">
-                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-                        Detect Stale Answers. Decrypt the Truth.
+                    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-semibold">
+                        <i class="fa-solid fa-bolt text-[10px]"></i>
+                        <span>Zero-Hallucination Fact Verification</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-white leading-tight">
+                        Detect Stale Answers. <br class="hidden sm:inline">Decrypt Ground Truth in Seconds.
                     </h1>
-                    <p class="text-xs sm:text-sm text-zinc-400 max-w-lg mx-auto leading-relaxed">
-                        Paste any AI statement below. FreshGuard extracts atomic assertions, retrieves live 2026 web evidence via <strong>Tavily</strong>, and instantly pinpoints <strong>what is outdated or wrong</strong>.
+                    <p class="text-xs sm:text-sm text-zinc-400 max-w-xl mx-auto leading-relaxed">
+                        Cross-checks any LLM answer against live 2026 web evidence via <strong>Tavily</strong> and <strong>Bifrost Gateway</strong>. Pinpoints obsolete facts, quantifies temporal decay, and generates verified rewrites.
                     </p>
                 </div>
 
-                <!-- Quick Action Prompt Chips -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left pt-2">
-                    <button class="quick-chip p-3.5 rounded-2xl bg-surface-900/90 border border-white/5 text-xs space-y-1.5 text-left" data-prompt="OpenAI's flagship GPT-4 model costs $30.00 per 1M prompt tokens and $60.00 per 1M completion tokens.">
-                        <span class="font-bold text-white flex items-center">
-                            <i class="fa-solid fa-tags text-cyan-400 mr-2 text-xs"></i> Stale OpenAI Pricing
+                <!-- Preset Benchmark Test Suite (1-Click Run) -->
+                <div class="pt-2 space-y-2">
+                    <div class="flex items-center justify-between px-1 text-xs text-zinc-400 font-mono">
+                        <span class="flex items-center space-x-1.5 text-zinc-300">
+                            <i class="fa-solid fa-flask-vial text-cyan-400"></i>
+                            <span class="font-bold">Live Benchmark Test Cases (Click to Test):</span>
                         </span>
-                        <p class="text-zinc-400 text-[11px] leading-snug">Flag 2023 legacy $30 pricing vs current 2026 GPT-4o rates...</p>
-                    </button>
+                        <span class="text-[10px] text-zinc-500">Live 2026 Ground Truth</span>
+                    </div>
 
-                    <button class="quick-chip p-3.5 rounded-2xl bg-surface-900/90 border border-white/5 text-xs space-y-1.5 text-left" data-prompt="To build server-side rendered pages in Next.js, create files inside /pages and export getServerSideProps.">
-                        <span class="font-bold text-white flex items-center">
-                            <i class="fa-brands fa-react text-cyan-400 mr-2 text-xs"></i> Next.js Framework API
-                        </span>
-                        <p class="text-zinc-400 text-[11px] leading-snug">Audit deprecated Pages router vs modern App Router...</p>
-                    </button>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left">
+                        <button class="quick-chip p-3.5 rounded-2xl bg-surface-900/90 border border-white/5 text-xs space-y-1.5 text-left" data-prompt="OpenAI's flagship GPT-4 model costs $30.00 per 1M prompt tokens and $60.00 per 1M completion tokens.">
+                            <span class="font-bold text-white flex items-center justify-between">
+                                <span class="flex items-center">
+                                    <i class="fa-solid fa-tags text-cyan-400 mr-2 text-xs"></i> OpenAI Pricing Evolution
+                                </span>
+                                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">Stale ~91%</span>
+                            </span>
+                            <p class="text-zinc-400 text-[11px] leading-snug">Flag 2023 legacy $30 pricing vs modern GPT-4o $2.50 rates...</p>
+                        </button>
 
-                    <button class="quick-chip p-3.5 rounded-2xl bg-surface-900/90 border border-white/5 text-xs space-y-1.5 text-left" data-prompt="Parag Agrawal is currently the Chief Executive Officer of Twitter, leading product and engineering.">
-                        <span class="font-bold text-white flex items-center">
-                            <i class="fa-solid fa-user-tie text-cyan-400 mr-2 text-xs"></i> Twitter / X Leadership
-                        </span>
-                        <p class="text-zinc-400 text-[11px] leading-snug">Detect executive turnover and company rebranding...</p>
-                    </button>
+                        <button class="quick-chip p-3.5 rounded-2xl bg-surface-900/90 border border-white/5 text-xs space-y-1.5 text-left" data-prompt="Parag Agrawal is currently the Chief Executive Officer of Twitter, leading product and engineering.">
+                            <span class="font-bold text-white flex items-center justify-between">
+                                <span class="flex items-center">
+                                    <i class="fa-solid fa-user-tie text-cyan-400 mr-2 text-xs"></i> Twitter / X Leadership
+                                </span>
+                                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">Executive Turnover</span>
+                            </span>
+                            <p class="text-zinc-400 text-[11px] leading-snug">Detect executive departure following Musk buyout & rebrand...</p>
+                        </button>
 
-                    <button class="quick-chip p-3.5 rounded-2xl bg-surface-900/90 border border-white/5 text-xs space-y-1.5 text-left" data-prompt="The speed of light in a vacuum is exactly 299,792,458 meters per second.">
-                        <span class="font-bold text-white flex items-center">
-                            <i class="fa-solid fa-atom text-emerald-400 mr-2 text-xs"></i> Evergreen Physics Constant
-                        </span>
-                        <p class="text-zinc-400 text-[11px] leading-snug">Verify timeless laws with 0% temporal volatility...</p>
-                    </button>
+                        <button class="quick-chip p-3.5 rounded-2xl bg-surface-900/90 border border-white/5 text-xs space-y-1.5 text-left" data-prompt="To build server-side rendered pages in Next.js, create files inside /pages and export getServerSideProps.">
+                            <span class="font-bold text-white flex items-center justify-between">
+                                <span class="flex items-center">
+                                    <i class="fa-brands fa-react text-cyan-400 mr-2 text-xs"></i> Next.js Framework API
+                                </span>
+                                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">Deprecated API</span>
+                            </span>
+                            <p class="text-zinc-400 text-[11px] leading-snug">Audit deprecated Pages router vs modern App Router paradigm...</p>
+                        </button>
+
+                        <button class="quick-chip p-3.5 rounded-2xl bg-surface-900/90 border border-white/5 text-xs space-y-1.5 text-left" data-prompt="The speed of light in a vacuum is exactly 299,792,458 meters per second.">
+                            <span class="font-bold text-white flex items-center justify-between">
+                                <span class="flex items-center">
+                                    <i class="fa-solid fa-atom text-emerald-400 mr-2 text-xs"></i> Evergreen Physics Law
+                                </span>
+                                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">100% Fresh</span>
+                            </span>
+                            <p class="text-zinc-400 text-[11px] leading-snug">Verify timeless laws with 0% decay volatility score...</p>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -272,16 +313,16 @@
                 <!-- Radar Scanner Animation -->
                 <div class="radar-scanner flex-shrink-0 shadow-lg shadow-cyan-500/20"></div>
 
-                <div class="bg-surface-900/95 border border-cyan-500/30 rounded-2xl p-4 space-y-2.5 flex-grow shadow-xl">
+                <div class="bg-surface-900/95 border border-cyan-500/35 rounded-2xl p-4 space-y-2.5 flex-grow shadow-2xl">
                     <div class="flex items-center justify-between text-cyan-300 font-mono text-xs">
                         <div class="flex items-center space-x-2">
                             <i class="fa-solid fa-crosshairs fa-spin text-xs text-cyan-400"></i>
                             <span id="thinking-stage-text">Deconstructing atomic factual assertions...</span>
                         </div>
-                        <span class="text-[10px] text-zinc-500">Live Tavily + Bifrost</span>
+                        <span class="text-[10px] text-zinc-500 font-mono">Live Tavily + Bifrost</span>
                     </div>
                     <div class="w-full bg-surface-950 rounded-full h-1.5 overflow-hidden">
-                        <div id="thinking-progress" class="bg-gradient-to-r from-cyan-400 via-indigo-500 to-emerald-400 h-full w-20 transition-all duration-300"></div>
+                        <div id="thinking-progress" class="bg-gradient-to-r from-cyan-400 via-indigo-500 to-emerald-400 h-full w-24 transition-all duration-300"></div>
                     </div>
                 </div>
             </div>
@@ -292,11 +333,11 @@
         <div class="border-t border-white/5 bg-surface-950/95 backdrop-blur-md p-3 sm:p-4 flex-shrink-0 z-20">
             <div class="max-w-3xl mx-auto space-y-2">
                 <!-- Textarea Card with Glow Focus -->
-                <div class="relative bg-surface-900/90 border border-white/10 focus-within:border-cyan-500/60 focus-within:shadow-[0_0_20px_rgba(6,182,212,0.15)] rounded-2xl p-3 transition-all duration-200">
+                <div class="relative bg-surface-900/90 border border-white/10 focus-within:border-cyan-500/60 focus-within:shadow-[0_0_25px_rgba(6,182,212,0.2)] rounded-2xl p-3 transition-all duration-200">
                     <textarea 
                         id="chat-input" 
                         rows="2" 
-                        placeholder="Paste an AI-generated statement, code doc, pricing quote, or executive fact to audit..."
+                        placeholder="Paste an AI statement, pricing claim, API method, or executive fact to audit..."
                         class="w-full bg-transparent text-zinc-100 placeholder-zinc-500 text-xs sm:text-sm outline-none resize-none leading-relaxed px-1 py-1 max-h-36"
                     ></textarea>
 
@@ -311,7 +352,7 @@
 
                         <div class="flex items-center space-x-2.5">
                             <span class="text-[10px] font-mono text-zinc-500 hidden sm:inline">Enter to verify · Shift+Enter for newline</span>
-                            <button id="send-btn" class="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-400 to-indigo-500 hover:from-cyan-300 hover:to-indigo-400 text-surface-950 font-bold flex items-center justify-center transition-all disabled:opacity-30 shadow-md shadow-cyan-500/20">
+                            <button id="send-btn" class="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-400 to-indigo-500 hover:from-cyan-300 hover:to-indigo-400 text-surface-950 font-bold flex items-center justify-center transition-all disabled:opacity-30 shadow-md shadow-cyan-500/25">
                                 <i class="fa-solid fa-arrow-up text-xs"></i>
                             </button>
                         </div>
@@ -319,13 +360,67 @@
                 </div>
 
                 <!-- Exact Mandated Footer Attribution -->
-                <div class="text-center text-[10px] font-mono text-zinc-400 pt-1 tracking-wide">
+                <div class="text-center text-[10.5px] font-mono text-zinc-400 pt-1 tracking-wide">
                     THE PROJECT BY <strong class="text-zinc-200">ADITHYA R KULKARNI</strong> AND <strong class="text-zinc-200">MANISHA M KULKARNI</strong> | TEAM <strong class="text-cyan-400">SOL CULTURE</strong>
                 </div>
             </div>
         </div>
 
     </main>
+
+    <!-- ============================================================ -->
+    <!-- DEVELOPER INTEGRATION API DRAWER / MODAL                     -->
+    <!-- ============================================================ -->
+    <div id="api-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay hidden">
+        <div class="bg-surface-900 border border-cyan-500/40 rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl relative">
+            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                        <i class="fa-solid fa-code text-sm"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-white">Developer API & Drop-In Middleware</h3>
+                        <span class="text-[10px] font-mono text-zinc-400">FastAPI, Python SDK & cURL Integration</span>
+                    </div>
+                </div>
+                <button id="close-api-modal" class="text-zinc-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Code Tabs -->
+            <div class="space-y-3 text-xs">
+                <div class="flex items-center space-x-2 border-b border-white/5 pb-2">
+                    <button class="px-2.5 py-1 rounded-lg bg-white/10 text-white font-mono font-semibold api-tab-btn" data-lang="python">Python SDK</button>
+                    <button class="px-2.5 py-1 rounded-lg text-zinc-400 hover:text-white font-mono api-tab-btn" data-lang="curl">cURL Command</button>
+                    <button class="px-2.5 py-1 rounded-lg text-zinc-400 hover:text-white font-mono api-tab-btn" data-lang="node">Node.js / TS</button>
+                </div>
+
+                <div id="code-snippet-container" class="relative bg-surface-950 rounded-xl p-3.5 border border-white/5 font-mono text-[11px] text-zinc-300 overflow-x-auto leading-relaxed">
+                    <button id="copy-code-btn" class="absolute top-2.5 right-2.5 px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-cyan-300 text-[10px] font-mono">
+                        <i class="fa-regular fa-copy mr-1"></i> Copy
+                    </button>
+                    <pre><code id="code-snippet-text">import requests
+
+res = requests.post(
+    "http://localhost:8000/api/verify",
+    json={
+        "text": "OpenAI flagship model GPT-4 costs $30.00/1M tokens.",
+        "search_depth": "advanced"
+    }
+)
+report = res.json()
+print("Freshness Score:", report["overall_freshness_score"])
+print("Verified 2026 Truth:", report["updated_text"])</code></pre>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-2 border-t border-white/10 text-xs">
+                <span class="text-[11px] font-mono text-zinc-400">Documentation & OpenAPI Specs: <a href="/docs" target="_blank" class="text-cyan-400 hover:underline">/docs</a></span>
+                <button id="close-api-modal-btn" class="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-semibold">Done</button>
+            </div>
+        </div>
+    </div>
 
     <script src="/static/app.js"></script>
 </body>

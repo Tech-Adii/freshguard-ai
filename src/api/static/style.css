@@ -1,16 +1,14 @@
 /* ==========================================================================
-   FreshGuard AI — Cyber-Intelligence Fact Verification System
+   FreshGuard AI — Supreme Fact Verification & Temporal Obsolescence Engine
    Team SOL CULTURE: Adithya R Kulkarni & Manisha M Kulkarni
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
     --bg-dark: #07080c;
-    --bg-card: #0d0f17;
-    --bg-card-hover: #121622;
-    --border-subtle: rgba(255, 255, 255, 0.07);
-    --border-glow: rgba(99, 102, 241, 0.35);
+    --bg-card: #0d101a;
+    --bg-card-hover: #121626;
     --primary-cyan: #06b6d4;
     --primary-emerald: #10b981;
     --primary-indigo: #6366f1;
@@ -23,10 +21,21 @@ body {
     background-color: var(--bg-dark);
     color: #e2e8f0;
     overflow: hidden;
+    position: relative;
 }
 
 code, pre, .font-mono {
     font-family: 'JetBrains Mono', monospace;
+}
+
+/* Background Canvas for Interactive Floating Dust/Constellation Particles */
+#bg-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
 }
 
 /* Ambient Cyber Grid & Glow Backdrop */
@@ -34,9 +43,9 @@ code, pre, .font-mono {
     position: absolute;
     inset: 0;
     background-image: 
-        radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15), transparent 45%),
-        radial-gradient(circle at 10% 30%, rgba(6, 182, 212, 0.08), transparent 35%),
-        radial-gradient(circle at 90% 70%, rgba(16, 185, 129, 0.06), transparent 40%),
+        radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.16), transparent 50%),
+        radial-gradient(circle at 15% 25%, rgba(6, 182, 212, 0.10), transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(16, 185, 129, 0.08), transparent 45%),
         linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
     background-size: 100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px;
@@ -53,14 +62,14 @@ code, pre, .font-mono {
     background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.14);
     border-radius: 6px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.25);
 }
 
-/* Sidebar Styling & Transitions */
+/* Sidebar Animations */
 #sidebar {
     transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -79,31 +88,38 @@ code, pre, .font-mono {
 }
 @keyframes fgPulseCore {
     0%, 100% { transform: scale(1); opacity: 0.6; }
-    50% { transform: scale(1.18); opacity: 1; }
+    50% { transform: scale(1.22); opacity: 1; }
 }
 @keyframes fgRadarSweep {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+@keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(6, 182, 212, 0.2); }
+    50% { box-shadow: 0 0 30px rgba(6, 182, 212, 0.45); }
+}
 
 .fg-spin-slow {
     transform-origin: 20px 20px;
-    animation: fgSpinSlow 22s linear infinite;
+    animation: fgSpinSlow 20s linear infinite;
 }
 .fg-pulse-core {
     transform-origin: 20px 20px;
-    animation: fgPulseCore 2.5s ease-in-out infinite;
+    animation: fgPulseCore 2.2s ease-in-out infinite;
+}
+.glow-card {
+    animation: glowPulse 4s ease-in-out infinite;
 }
 
-/* High-Tech Radar Scanner in Thinking Indicator */
+/* High-Tech Radar Scanner in Thinking State */
 .radar-scanner {
-    width: 38px;
-    height: 38px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    border: 1.5px solid rgba(6, 182, 212, 0.4);
+    border: 1.5px solid rgba(6, 182, 212, 0.45);
     position: relative;
     overflow: hidden;
-    background: rgba(6, 182, 212, 0.05);
+    background: rgba(6, 182, 212, 0.08);
 }
 .radar-scanner::before {
     content: '';
@@ -112,16 +128,16 @@ code, pre, .font-mono {
     left: 50%;
     width: 50%;
     height: 50%;
-    background: conic-gradient(from 0deg, rgba(6, 182, 212, 0.7), transparent 60%);
+    background: conic-gradient(from 0deg, rgba(6, 182, 212, 0.8), transparent 60%);
     transform-origin: 0% 0%;
-    animation: fgRadarSweep 1.6s linear infinite;
+    animation: fgRadarSweep 1.4s linear infinite;
 }
 
-/* Smooth Chat Bubble Entrance */
+/* Chat Bubble Spring Entrance */
 @keyframes slideUpFade {
     0% {
         opacity: 0;
-        transform: translateY(16px) scale(0.98);
+        transform: translateY(20px) scale(0.97);
     }
     100% {
         opacity: 1;
@@ -129,19 +145,26 @@ code, pre, .font-mono {
     }
 }
 .chat-bubble-animate {
-    animation: slideUpFade 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: slideUpFade 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Audio Waveform Equalizer Animation */
+/* Circular SVG Score Dial */
+.gauge-circle {
+    transition: stroke-dashoffset 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+}
+
+/* Audio Waveform Equalizer */
 @keyframes soundWave {
     0%, 100% { height: 4px; }
-    50% { height: 16px; }
+    50% { height: 18px; }
 }
 .wave-bar {
     width: 2.5px;
-    background-color: #06b6d4;
+    background: #06b6d4;
     border-radius: 2px;
-    animation: soundWave 0.8s ease-in-out infinite;
+    animation: soundWave 0.75s ease-in-out infinite;
 }
 .wave-bar:nth-child(1) { animation-delay: 0.0s; }
 .wave-bar:nth-child(2) { animation-delay: 0.15s; }
@@ -150,7 +173,7 @@ code, pre, .font-mono {
 
 /* Filter Buttons in Sidebar */
 .hist-filter-btn.active {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.12);
     color: #ffffff;
     font-weight: 600;
 }
@@ -160,7 +183,7 @@ code, pre, .font-mono {
     background-color: rgba(244, 63, 94, 0.18);
     color: #fda4af;
     text-decoration: line-through;
-    text-decoration-thickness: 1.5px;
+    text-decoration-thickness: 2px;
     text-decoration-color: #f43f5e;
     padding: 2px 7px;
     border-radius: 5px;
@@ -178,41 +201,67 @@ code, pre, .font-mono {
     display: inline;
 }
 
-/* Decryption Cards & Flaw Indicators */
+/* Decryption Flaw Cards */
 .flaw-card {
-    background: linear-gradient(135deg, rgba(244, 63, 94, 0.08) 0%, rgba(13, 15, 23, 0.95) 100%);
-    border: 1px solid rgba(244, 63, 94, 0.3);
-    box-shadow: 0 4px 20px -2px rgba(244, 63, 94, 0.15);
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    background: linear-gradient(135deg, rgba(244, 63, 94, 0.09) 0%, rgba(13, 16, 26, 0.98) 100%);
+    border: 1px solid rgba(244, 63, 94, 0.35);
+    box-shadow: 0 4px 20px -2px rgba(244, 63, 94, 0.18);
+    transition: all 0.25s ease;
 }
 .flaw-card:hover {
-    transform: translateY(-1px);
-    border-color: rgba(244, 63, 94, 0.5);
+    transform: translateY(-2px);
+    border-color: rgba(244, 63, 94, 0.6);
+    box-shadow: 0 8px 25px -2px rgba(244, 63, 94, 0.28);
 }
 
 .verified-card {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(13, 15, 23, 0.95) 100%);
-    border: 1px solid rgba(16, 185, 129, 0.3);
-    box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.15);
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.09) 0%, rgba(13, 16, 26, 0.98) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.18);
+    transition: all 0.25s ease;
 }
 .verified-card:hover {
-    transform: translateY(-1px);
-    border-color: rgba(16, 185, 129, 0.5);
+    transform: translateY(-2px);
+    border-color: rgba(16, 185, 129, 0.6);
+    box-shadow: 0 8px 25px -2px rgba(16, 185, 129, 0.28);
 }
 
-/* Prompt Chips Micro-interactions */
+/* Quick Chips */
 .quick-chip {
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .quick-chip:hover {
     transform: translateY(-2px);
-    border-color: rgba(99, 102, 241, 0.5);
-    box-shadow: 0 8px 24px -4px rgba(99, 102, 241, 0.25);
-    background: rgba(18, 22, 34, 0.95);
+    border-color: rgba(6, 182, 212, 0.4);
+    box-shadow: 0 8px 24px -4px rgba(6, 182, 212, 0.2);
+    background: rgba(18, 22, 38, 0.95);
 }
 
-/* Toast Message */
-#toast {
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+/* Modal / Drawer */
+.modal-overlay {
+    background: rgba(4, 5, 8, 0.82);
+    backdrop-filter: blur(12px);
+}
+
+/* Sound Toggle Button */
+.sound-active {
+    color: #06b6d4 !important;
+    border-color: rgba(6, 182, 212, 0.4) !important;
+}
+
+/* Grade Medal Badges */
+.grade-f {
+    background: linear-gradient(135deg, #f43f5e, #be123c);
+    color: #ffffff;
+    box-shadow: 0 0 16px rgba(244, 63, 94, 0.5);
+}
+.grade-a {
+    background: linear-gradient(135deg, #10b981, #047857);
+    color: #ffffff;
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.5);
+}
+.grade-b {
+    background: linear-gradient(135deg, #f59e0b, #b45309);
+    color: #ffffff;
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.5);
 }
