@@ -13,15 +13,55 @@
 [![Gemini](https://img.shields.io/badge/Reasoning%20LLM-Google%20Gemini%203.5-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev)
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI%20Async-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Benchmarks](https://img.shields.io/badge/Benchmarks-100%25%20PASS-emerald?style=for-the-badge&logo=pytest&logoColor=white)](#-automated-benchmarks-100-pass)
+[![Pitch Deck](https://img.shields.io/badge/Pitch%20Deck-12%20Slides-indigo?style=for-the-badge&logo=powerpoint&logoColor=white)](FreshGuard_AI_Pitch_Deck.pptx)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
 <br/>
 
-[Live Dashboard](http://localhost:8000) · [Architecture](#-architecture--pipeline) · [Quickstart](#-quickstart-in-60-seconds) · [Benchmarks](#-automated-benchmarks-100-pass) · [Middleware SDK](#-middleware-integration) · [About the Team](#-team--attribution)
+[Live Dashboard](http://localhost:8000) · [📊 Interactive Pitch Deck](http://localhost:8000/presentation) · [📥 Download PPTX](FreshGuard_AI_Pitch_Deck.pptx) · [Architecture](#-architecture--pipeline) · [Quickstart](#-quickstart-in-60-seconds) · [Benchmarks](#-automated-benchmarks-100-pass) · [About the Team](#-team--attribution)
 
 ---
 
 </div>
+
+## 📊 Executive Presentation & Pitch Deck (12 Slides)
+
+An executive pitch deck has been prepared and built into the platform:
+
+* **🖥️ Interactive In-Browser Presentation:** Navigate live slides with keyboard arrows (<kbd>←</kbd> / <kbd>→</kbd> / <kbd>Space</kbd>) and fullscreen (<kbd>F</kbd>) at **[`http://localhost:8000/presentation`](http://localhost:8000/presentation)**.
+* **📥 Official PowerPoint Deck:** Download the 16:9 widescreen presentation directly from the repository or API: **[`FreshGuard_AI_Pitch_Deck.pptx`](FreshGuard_AI_Pitch_Deck.pptx)**.
+
+| Slide # | Slide Title | Core Focus & Challenge Mapping |
+| :---: | :--- | :--- |
+| **01** | **Title & Executive Overview** | Problem Statement 06, Theme: AI Agents & Intelligent Systems, Team SOL CULTURE |
+| **02** | **Hackathon Challenge Alignment** | Explicit mapping of the 4 Core Requirements (Claim ID, Detection, Live Search, Scoring) |
+| **03** | **The Reality: Temporal Blindness** | Why LLMs generate outdated facts confidently; 4 catastrophic business vectors |
+| **04** | **Our Innovation: FreshGuard AI** | Autonomous temporal firewall, Volatility Indexing ($0.0-1.0$), Dual-Query Discovery |
+| **05** | **Mandatory Partner Tech: Tavily** | Deep integration of Tavily (by Nebius) for live 2026 web consensus and canonical sources |
+| **06** | **Mandatory Partner Tech: Bifrost** | Deep integration of Maxim AI Bifrost Gateway for model routing, caching, and Gemini failover |
+| **07** | **The 4-Stage Verification Workflow** | End-to-end execution path: Deconstruction → Temporal Gate → Search → Reasoning → Diff |
+| **08** | **Automated Benchmarks (100% Pass)** | Empirical proof against real pricing, Next.js API deprecation, and Twitter leadership |
+| **09** | **Award-Winning User Experience** | ChatGPT/Claude dark glassmorphism, Instant Flaw Decryption Matrix, Voice Briefings |
+| **10** | **Developer Middleware & REST API** | 2-line Python integration for LangChain/OpenAI, OpenAPI Swagger endpoints |
+| **11** | **Enterprise Commercial Viability** | TAM/SAM/SOM, high-value enterprise use cases, token-level streaming roadmap |
+| **12** | **Conclusion & Attribution** | Live links, GitHub URL, and mandatory team attribution |
+
+---
+
+## 🎯 Hackathon Mandates & Core Requirements Fulfillments
+
+FreshGuard AI was engineered specifically to solve **Problem Statement 06: Build a Stale-Answer Detector for AI Applications** under the **AI Agents & Intelligent Systems** theme:
+
+1. **Claim Identification:**
+   The `claim_extractor.py` engine decomposes complex, monolithic AI responses into atomic, independently testable statements. Each assertion is indexed with a **Temporal Volatility Score** ($0.0 - 1.0$), identifying whether the subject matter is static or rapidly decaying.
+2. **Freshness Detection:**
+   The system actively flags claims involving **product pricing, software API versions, company leadership, and regulations**. An autonomous superseding query formulation module flags legacy models (e.g. GPT-4), deprecated methods (e.g. `getServerSideProps`), and former executives.
+3. **Live Verification (Powered by Tavily):**
+   Flagged volatile claims are queried against live 2026 web consensus using **Tavily Search API** (`search_depth="advanced"`). Tavily retrieves authoritative documentation, current publish dates, and verifiable citation snippets.
+4. **Freshness Scoring (Powered by Bifrost):**
+   Evidence is evaluated through the **Bifrost AI Gateway (by Maxim AI)** with automatic failover to Google Gemini 3.5. Bifrost conducts forensic contradiction reasoning, applies heavy decay penalties to superseded entities, and computes an overall **Freshness Score ($0\% - 100\%$)** and **Factual Health Grade** (`Grade A+`, `Grade B`, `Grade F`).
+
+---
 
 ## 📌 Why We Built FreshGuard AI
 
@@ -202,7 +242,8 @@ freshguard-ai/
 │   │   └── static/
 │   │       ├── index.html         # ChatGPT-style dashboard with About Me modal
 │   │       ├── app.js             # Conversational stream, dial animations & TTS
-│   │       └── style.css          # Dark glassmorphism, glowing badges & diffs
+│   │       ├── style.css          # Dark glassmorphism, glowing badges & diffs
+│   │       └── presentation.html  # Interactive 12-slide web pitch deck
 │   ├── core/
 │   │   ├── claim_extractor.py     # Atomic claim extraction & volatility scoring
 │   │   ├── tavily_verifier.py     # Dual-query live 2026 search via Tavily
@@ -219,6 +260,7 @@ freshguard-ai/
 ├── bifrost/
 │   ├── config.json                # Maxim AI Bifrost provider & routing config
 │   └── docker-compose.yml         # Container configuration for Bifrost
+├── FreshGuard_AI_Pitch_Deck.pptx  # Official 12-slide executive presentation
 ├── requirements.txt               # Python package dependencies
 ├── run.py                         # Application launcher with hot-reload
 ├── cli.py                         # Command-line verification tool

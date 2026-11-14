@@ -8,11 +8,15 @@
 * **Tagline:** Real-Time Temporal Fact Verification & Stale-Answer Shield for Generative AI
 * **Primary Problem Statement:** Problem Statement 06 — Build a Stale-Answer Detector for AI Applications
 * **Hackathon:** Geek Room Global AI Hackathon on HackCulture
+* **Theme:** AI Agents & Intelligent Systems
+* **Primary Problem Statement:** Problem Statement 06 — Build a Stale-Answer Detector for AI Applications
 * **Team Name:** Team SOL CULTURE
 * **Creators:** Adithya R Kulkarni & Manisha M Kulkarni
 * **Project Attribution:** THE PROJECT BY ADITHYA R KULKARNI AND MANISHA M KULKARNI | TEAM SOL CULTURE
-* **Core Technologies Integrated:** **Bifrost by Maxim AI** & **Tavily (by Nebius)** + **Google Gemini 3.5**
+* **Core Technologies Integrated:** **Tavily (by Nebius)** & **Bifrost by Maxim AI** + **Google Gemini 3.5**
 * **Live Demo URL:** `http://localhost:8000` (Local)
+* **Interactive Pitch Deck:** `http://localhost:8000/presentation`
+* **PowerPoint Deck:** `FreshGuard_AI_Pitch_Deck.pptx` (12 Widescreen Slides)
 * **GitHub Repository URL:** `https://github.com/Tech-Adii/freshguard-ai`
 
 ---

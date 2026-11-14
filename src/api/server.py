@@ -146,3 +146,23 @@ async def serve_index():
     if index_file.exists():
         return FileResponse(index_file)
     return {"message": "FreshGuard AI API is operational."}
+
+@app.get("/presentation")
+@app.get("/pitch")
+@app.get("/deck")
+async def serve_presentation():
+    deck_file = STATIC_DIR / "presentation.html"
+    if deck_file.exists():
+        return FileResponse(deck_file)
+    return {"message": "Presentation deck is being prepared."}
+
+@app.get("/download-deck")
+async def download_pptx():
+    pptx_path = Path(__file__).parent.parent.parent / "FreshGuard_AI_Pitch_Deck.pptx"
+    if pptx_path.exists():
+        return FileResponse(
+            str(pptx_path),
+            media_type="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            filename="FreshGuard_AI_Pitch_Deck.pptx"
+        )
+    raise HTTPException(status_code=404, detail="Presentation deck file not found.")
