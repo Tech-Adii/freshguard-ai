@@ -19,10 +19,12 @@ YOUR MISSION:
 Determine if the claim is FRESH (current and accurate), STALE (outdated or contradicted by newer 2026 data), UNVERIFIED (insufficient web evidence), or EVERGREEN (timeless law/fact).
 
 EVALUATION CRITERIA:
-- If newer information contradicts pricing, API names, version numbers, or leadership -> Classify as "stale".
-- If the current sources confirm the claim remains completely accurate -> Classify as "fresh".
+- If newer information contradicts pricing, API methods, versions, or leadership -> Classify as "stale".
+- If a product, model, or entity is described as "flagship", "latest", or "current" but has been superseded by newer models or releases (e.g., GPT-4 is legacy, superseded by GPT-4o, o1/o3 series; Next.js pages router superseded by App Router) -> Classify as "stale".
+- If the claimed price, version, or status reflects legacy or outdated 2022-2024 information instead of modern 2026 ground truth -> Classify as "stale".
+- If current 2026 sources confirm the claim remains active, flagship, and completely accurate -> Classify as "fresh".
 - If it is a mathematical fact, physics constant, or established historical event -> Classify as "evergreen".
-- If the sources do not provide enough recent proof -> Classify as "unverified".
+- If sources do not provide enough recent proof -> Classify as "unverified".
 
 Produce a JSON object with:
 - "status": "fresh" | "stale" | "unverified" | "evergreen"

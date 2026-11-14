@@ -1,79 +1,218 @@
-/* FreshGuard AI — Conversational UI (ChatGPT / Claude / Gemini Style) */
+/* ==========================================================================
+   FreshGuard AI — Cyber-Intelligence Fact Verification System
+   Team SOL CULTURE: Adithya R Kulkarni & Manisha M Kulkarni
+   ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-dark: #07080c;
+    --bg-card: #0d0f17;
+    --bg-card-hover: #121622;
+    --border-subtle: rgba(255, 255, 255, 0.07);
+    --border-glow: rgba(99, 102, 241, 0.35);
+    --primary-cyan: #06b6d4;
+    --primary-emerald: #10b981;
+    --primary-indigo: #6366f1;
+    --primary-rose: #f43f5e;
+    --primary-amber: #f59e0b;
+}
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: #09090b;
+    background-color: var(--bg-dark);
+    color: #e2e8f0;
+    overflow: hidden;
 }
 
 code, pre, .font-mono {
     font-family: 'JetBrains Mono', monospace;
 }
 
+/* Ambient Cyber Grid & Glow Backdrop */
+.cyber-backdrop {
+    position: absolute;
+    inset: 0;
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15), transparent 45%),
+        radial-gradient(circle at 10% 30%, rgba(6, 182, 212, 0.08), transparent 35%),
+        radial-gradient(circle at 90% 70%, rgba(16, 185, 129, 0.06), transparent 40%),
+        linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
 }
 ::-webkit-scrollbar-track {
     background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-    background: #27272a;
-    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #3f3f46;
+    background: rgba(255, 255, 255, 0.22);
 }
 
-/* Sidebar collapsed state */
+/* Sidebar Styling & Transitions */
+#sidebar {
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
 #sidebar.collapsed {
-    width: 0px;
-    padding: 0px;
+    width: 0px !important;
+    padding: 0px !important;
+    overflow: hidden !important;
+    border-right: none !important;
+    pointer-events: none;
+}
+
+/* Animated SVG Icon Effects */
+@keyframes fgSpinSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+@keyframes fgPulseCore {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.18); opacity: 1; }
+}
+@keyframes fgRadarSweep {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.fg-spin-slow {
+    transform-origin: 20px 20px;
+    animation: fgSpinSlow 22s linear infinite;
+}
+.fg-pulse-core {
+    transform-origin: 20px 20px;
+    animation: fgPulseCore 2.5s ease-in-out infinite;
+}
+
+/* High-Tech Radar Scanner in Thinking Indicator */
+.radar-scanner {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(6, 182, 212, 0.4);
+    position: relative;
     overflow: hidden;
-    border-right: none;
+    background: rgba(6, 182, 212, 0.05);
+}
+.radar-scanner::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    height: 50%;
+    background: conic-gradient(from 0deg, rgba(6, 182, 212, 0.7), transparent 60%);
+    transform-origin: 0% 0%;
+    animation: fgRadarSweep 1.6s linear infinite;
+}
+
+/* Smooth Chat Bubble Entrance */
+@keyframes slideUpFade {
+    0% {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+.chat-bubble-animate {
+    animation: slideUpFade 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Audio Waveform Equalizer Animation */
+@keyframes soundWave {
+    0%, 100% { height: 4px; }
+    50% { height: 16px; }
+}
+.wave-bar {
+    width: 2.5px;
+    background-color: #06b6d4;
+    border-radius: 2px;
+    animation: soundWave 0.8s ease-in-out infinite;
+}
+.wave-bar:nth-child(1) { animation-delay: 0.0s; }
+.wave-bar:nth-child(2) { animation-delay: 0.15s; }
+.wave-bar:nth-child(3) { animation-delay: 0.3s; }
+.wave-bar:nth-child(4) { animation-delay: 0.45s; }
+
+/* Filter Buttons in Sidebar */
+.hist-filter-btn.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    font-weight: 600;
 }
 
 /* Diff Highlighting */
 .stale-highlight {
-    background-color: rgba(239, 68, 68, 0.16);
-    color: #fca5a5;
+    background-color: rgba(244, 63, 94, 0.18);
+    color: #fda4af;
     text-decoration: line-through;
-    padding: 1px 6px;
-    border-radius: 4px;
-    border: 1px solid rgba(239, 68, 68, 0.35);
+    text-decoration-thickness: 1.5px;
+    text-decoration-color: #f43f5e;
+    padding: 2px 7px;
+    border-radius: 5px;
+    border: 1px solid rgba(244, 63, 94, 0.4);
     display: inline;
-}
-
-.fresh-highlight {
-    background-color: rgba(16, 185, 129, 0.16);
-    color: #6ee7b7;
     font-weight: 500;
-    padding: 1px 6px;
-    border-radius: 4px;
-    border: 1px solid rgba(16, 185, 129, 0.35);
+}
+.fresh-highlight {
+    background-color: rgba(16, 185, 129, 0.18);
+    color: #6ee7b7;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 5px;
+    border: 1px solid rgba(16, 185, 129, 0.4);
     display: inline;
 }
 
-/* Filter Buttons in Sidebar */
-.hist-filter-btn.active {
-    background-color: #27272a;
-    color: #fafafa;
+/* Decryption Cards & Flaw Indicators */
+.flaw-card {
+    background: linear-gradient(135deg, rgba(244, 63, 94, 0.08) 0%, rgba(13, 15, 23, 0.95) 100%);
+    border: 1px solid rgba(244, 63, 94, 0.3);
+    box-shadow: 0 4px 20px -2px rgba(244, 63, 94, 0.15);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.flaw-card:hover {
+    transform: translateY(-1px);
+    border-color: rgba(244, 63, 94, 0.5);
 }
 
-/* Bubble animations */
-@keyframes slideUpFade {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.verified-card {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(13, 15, 23, 0.95) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.15);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.verified-card:hover {
+    transform: translateY(-1px);
+    border-color: rgba(16, 185, 129, 0.5);
 }
 
-.chat-bubble-animate {
-    animation: slideUpFade 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+/* Prompt Chips Micro-interactions */
+.quick-chip {
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.quick-chip:hover {
+    transform: translateY(-2px);
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow: 0 8px 24px -4px rgba(99, 102, 241, 0.25);
+    background: rgba(18, 22, 34, 0.95);
+}
+
+/* Toast Message */
+#toast {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
 }
