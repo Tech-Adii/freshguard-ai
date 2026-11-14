@@ -9,16 +9,18 @@ You are an expert Fact Verification & Information Freshness Analyst.
 Analyze the following LLM-generated answer and break it down into atomic, testable factual claims.
 
 For each claim:
-1. Extract the exact statement or assertion.
-2. Determine if it is time-sensitive or prone to staleness (prices, API versions, documentation, leadership, laws, statistics).
+1. Extract the exact statement or assertion. Split compound claims (e.g. pricing + flagship status) into atomic statements.
+2. Determine if it is time-sensitive or prone to staleness (prices, models, API versions, documentation, leadership, laws, statistics).
 3. Assign a `category`: "pricing", "api_and_docs", "leadership_and_people", "regulatory_and_legal", "product_specs", "general_factual", or "evergreen".
 4. Estimate a `time_volatility_score` between 0.0 and 1.0:
-   - 0.85 to 1.0: Highly volatile (Pricing, fast-evolving APIs, company leadership)
-   - 0.60 to 0.84: Moderately volatile (Product features, regulations, stats)
+   - 0.85 to 1.0: Highly volatile (Pricing, AI flagship models, fast-evolving APIs, company leadership)
+   - 0.60 to 0.84: Moderately volatile (Product specs, framework features, regulations)
    - 0.20 to 0.59: Slowly changing (Organizational history, broad architecture)
    - 0.0 to 0.19: Evergreen facts (Math, physics, established historical dates)
-5. Identify any temporal markers (e.g., "$30", "v4", "in 2023", "current CEO", "now").
-6. Formulate a targeted, temporal search query optimized for Tavily to verify if this claim is still true in 2026.
+5. Identify any temporal markers (e.g., "$30", "flagship", "current", "now", "latest", "v4", "in 2023").
+6. Formulate TWO targeted search queries optimized for Tavily:
+   - `verification_query`: Direct temporal query testing the claim (e.g., "OpenAI GPT-4 pricing per 1M tokens 2026").
+   - `superseding_query`: Query checking what the CURRENT state or replacement is in 2026 (e.g., "what is OpenAI current flagship model and pricing 2026").
 
 Return ONLY a valid JSON object matching this schema:
 {
@@ -28,8 +30,9 @@ Return ONLY a valid JSON object matching this schema:
       "text": "Specific atomic claim text",
       "category": "pricing",
       "time_volatility_score": 0.95,
-      "temporal_markers": ["$30", "1M tokens"],
-      "verification_query": "current pricing GPT-4 API official OpenAI 2026"
+      "temporal_markers": ["flagship", "$30", "1M prompt tokens"],
+      "verification_query": "OpenAI GPT-4 pricing per 1M prompt tokens 2026",
+      "superseding_query": "what is OpenAI current flagship AI model and pricing 2026"
     }
   ]
 }
@@ -72,6 +75,9 @@ class ClaimExtractor:
                 if cat_str not in valid_cats:
                     cat_str = ClaimCategory.GENERAL_FACTUAL.value
                 
+                v_query = item.get("verification_query", item.get("text", ""))
+                s_query = item.get("superseding_query", f"{item.get('text', '')} current status 2026")
+
                 claims.append(
                     Claim(
                         id=item.get("id", f"claim_{len(claims)+1}"),
@@ -79,7 +85,8 @@ class ClaimExtractor:
                         category=ClaimCategory(cat_str),
                         time_volatility_score=float(item.get("time_volatility_score", 0.5)),
                         temporal_markers=item.get("temporal_markers", []),
-                        verification_query=item.get("verification_query", item.get("text", ""))
+                        verification_query=v_query,
+                        superseding_query=s_query
                     )
                 )
             return claims
@@ -111,7 +118,8 @@ class ClaimExtractor:
                     category=category,
                     time_volatility_score=volatility,
                     temporal_markers=[],
-                    verification_query=f"{s} current status 2026"
+                    verification_query=f"{s} 2026 pricing status",
+                    superseding_query=f"{s} current reality 2026"
                 )
             )
         return claims

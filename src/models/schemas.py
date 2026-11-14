@@ -32,6 +32,10 @@ class Claim(BaseModel):
     verification_query: str = Field(
         description="Targeted temporal search query optimized for Tavily to verify this claim"
     )
+    superseding_query: Optional[str] = Field(
+        default=None,
+        description="Secondary query to discover the current state/successor/replacement in 2026"
+    )
 
 class EvidenceItem(BaseModel):
     url: str

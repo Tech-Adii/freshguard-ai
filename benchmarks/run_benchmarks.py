@@ -1,56 +1,81 @@
-import asyncio
+"""
+FreshGuard AI — Rigorous Forensic Accuracy Benchmark Suite
+Team SOL CULTURE: Adithya R Kulkarni & Manisha M Kulkarni
+"""
+
+import time
 import json
-from pathlib import Path
-from src.core.pipeline import pipeline
-from src.models.schemas import VerificationRequest
+import urllib.request
 
-async def run_all_benchmarks():
-    data_path = Path(__file__).parent / "benchmark_data.json"
-    with open(data_path, "r", encoding="utf-8") as f:
-        cases = json.load(f)
+BENCHMARKS = [
+    {
+        "name": "OpenAI Pricing Evolution",
+        "input": "OpenAI flagship model GPT-4 costs $30.00 per 1M prompt tokens and $60.00 per 1M completion tokens.",
+        "expected_status": "STALE",
+        "expected_score_max": 20.0
+    },
+    {
+        "name": "Next.js Framework API Deprecation",
+        "input": "To build server-side rendered pages in Next.js, create files inside /pages and export getServerSideProps.",
+        "expected_status": "STALE",
+        "expected_score_max": 20.0
+    },
+    {
+        "name": "Twitter / X Leadership Turnover",
+        "input": "Parag Agrawal is currently the Chief Executive Officer of Twitter, leading product and engineering.",
+        "expected_status": "STALE",
+        "expected_score_max": 10.0
+    },
+    {
+        "name": "Evergreen Physics Constant",
+        "input": "The speed of light in a vacuum is exactly 299,792,458 meters per second.",
+        "expected_status": "EVERGREEN",
+        "expected_score_min": 99.0
+    }
+]
 
-    print("=" * 75)
-    print("🚀 FRESHGUARD AI - AUTOMATED BENCHMARK EVALUATION SUITE")
-    print(f"Loaded {len(cases)} test cases across Pricing, APIs, Leadership, and Science.")
-    print("=" * 75)
+def run_benchmarks(server_url="http://localhost:8000"):
+    print("=" * 70)
+    print("🛡️ RUNNING FRESHGUARD AI FORENSIC ACCURACY BENCHMARK SUITE")
+    print(f"Target Server: {server_url}")
+    print("=" * 70)
 
-    results = []
-    for i, case in enumerate(cases, 1):
-        print(f"\n[{i}/{len(cases)}] Evaluating: {case['title']} ({case['category'].upper()})")
-        print(f"Input: \"{case['input_text'][:80]}...\"")
-        
-        req = VerificationRequest(text=case["input_text"], search_depth="advanced")
-        report = await pipeline.run(req)
+    passed = 0
+    for idx, test in enumerate(BENCHMARKS, 1):
+        print(f"\n[Test {idx}/{len(BENCHMARKS)}] {test['name']}...")
+        req = urllib.request.Request(
+            f"{server_url}/api/verify",
+            data=json.dumps({"text": test["input"], "search_depth": "advanced"}).encode(),
+            headers={"Content-Type": "application/json"}
+        )
+        t0 = time.time()
+        try:
+            with urllib.request.urlopen(req) as resp:
+                data = json.loads(resp.read().decode())
+                latency = round(time.time() - t0, 2)
+                score = data["overall_freshness_score"]
+                stale_cnt = data["stale_count"]
+                
+                is_stale_expected = test["expected_status"] == "STALE"
+                if is_stale_expected:
+                    test_ok = (stale_cnt > 0) and (score <= test["expected_score_max"])
+                else:
+                    test_ok = (stale_cnt == 0) and (score >= test["expected_score_min"])
 
-        detected_status = "stale" if report.stale_count > 0 else "fresh"
-        matches_expected = detected_status == case["expected_status"]
-        status_icon = "✅ PASS" if matches_expected else "⚠️ MISMATCH"
+                if test_ok:
+                    passed += 1
+                    status_badge = "✅ PASS"
+                else:
+                    status_badge = "❌ FAIL"
 
-        print(f"Result: {status_icon}")
-        print(f"- Overall Freshness Score: {report.overall_freshness_score}%")
-        print(f"- Claims: {report.total_claims} (Fresh: {report.fresh_count}, Stale: {report.stale_count}, Evergreen: {report.evergreen_count})")
-        print(f"- Latency: {report.latency_seconds}s | Gateway: {report.gateway_provider}")
-        if report.stale_count > 0:
-            print(f"- Stale Delta: {report.claims[0].stale_delta or 'Outdated information detected'}")
-            print(f"- Live Correction: {report.claims[0].current_value_correction or 'Updated'}")
+                print(f"  Result: {status_badge} | Score: {score}% | Latency: {latency}s | Stale Claims: {stale_cnt}")
+                print(f"  Summary: {data['summary'][:90]}...")
+        except Exception as e:
+            print(f"  Result: ❌ ERROR ({e})")
 
-        results.append({
-            "id": case["id"],
-            "title": case["title"],
-            "expected": case["expected_status"],
-            "actual": detected_status,
-            "score": report.overall_freshness_score,
-            "pass": matches_expected
-        })
-
-    print("\n" + "=" * 75)
-    print("BENCHMARK SUMMARY RESULTS")
-    print("=" * 75)
-    passed_count = sum(1 for r in results if r["pass"])
-    print(f"Accuracy: {passed_count}/{len(results)} ({round(passed_count/len(results)*100, 1)}%)\n")
-    for r in results:
-        mark = "✓" if r["pass"] else "✗"
-        print(f"[{mark}] {r['title']:<40} Expected: {r['expected']:<8} Score: {r['score']}%")
+    print("\n" + "=" * 70)
+    print(f"BENCHMARK RESULTS: {passed}/{len(BENCHMARKS)} PASSED ({(passed/len(BENCHMARKS))*100:.1f}%)")
+    print("=" * 70)
 
 if __name__ == "__main__":
-    asyncio.run(run_all_benchmarks())
+    run_benchmarks()

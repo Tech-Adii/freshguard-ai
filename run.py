@@ -25,4 +25,4 @@ if __name__ == "__main__":
     print("=" * 65)
 
     threading.Thread(target=open_browser, daemon=True).start()
-    uvicorn.run("src.api.server:app", host=settings.HOST, port=settings.PORT, reload=False)
+    uvicorn.run("src.api.server:app", host=settings.HOST, port=settings.PORT, reload=True)

@@ -21,21 +21,11 @@ class TavilyVerifier:
             except Exception as e:
                 print(f"[TavilyVerifier] Failed to initialize TavilyClient: {e}")
 
-    async def search_evidence(self, claim: Claim, search_depth: str = "advanced") -> List[EvidenceItem]:
-        """
-        Executes a targeted search on Tavily for a given claim and extracts evidence items.
-        """
-        # If the claim is evergreen (e.g. math or physics), we can skip heavy web search
-        if claim.time_volatility_score < 0.15:
+    async def _execute_single_search(self, query: str, search_depth: str = "advanced") -> List[EvidenceItem]:
+        """Runs a single search query on Tavily."""
+        if not self._client or not query:
             return []
 
-        if not self._client:
-            print("[TavilyVerifier] Tavily client not configured, skipping search.")
-            return []
-
-        query = claim.verification_query
-        
-        # Run sync Tavily client in threadpool to keep async loop non-blocking
         loop = asyncio.get_event_loop()
         try:
             results = await loop.run_in_executor(
@@ -43,20 +33,20 @@ class TavilyVerifier:
                 lambda: self._client.search(
                     query=query,
                     search_depth=search_depth,
-                    max_results=4,
+                    max_results=3,
                     include_answer=True
                 )
             )
-            
+
             evidence_list: List[EvidenceItem] = []
-            
+
             # Check if Tavily provided an AI-generated concise answer
             tavily_direct_answer = results.get("answer")
             if tavily_direct_answer:
                 evidence_list.append(
                     EvidenceItem(
                         url="https://tavily.com/verified-summary",
-                        title="Tavily Live Web Consensus",
+                        title=f"Live Web Consensus for: {query[:45]}...",
                         snippet=tavily_direct_answer,
                         published_date="Current 2026",
                         domain="tavily.com",
@@ -73,21 +63,56 @@ class TavilyVerifier:
                 pub_date = item.get("published_date") or None
                 score = float(item.get("score", 0.8))
 
-                evidence_list.append(
-                    EvidenceItem(
-                        url=url,
-                        title=title,
-                        snippet=snippet,
-                        published_date=pub_date,
-                        domain=parsed_domain,
-                        relevance_score=score
+                if len(snippet.strip()) > 20:
+                    evidence_list.append(
+                        EvidenceItem(
+                            url=url,
+                            title=title,
+                            snippet=snippet,
+                            published_date=pub_date,
+                            domain=parsed_domain,
+                            relevance_score=score
+                        )
                     )
-                )
 
             return evidence_list
         except Exception as e:
             print(f"[TavilyVerifier] Error searching for '{query}': {e}")
             return []
+
+    async def search_evidence(self, claim: Claim, search_depth: str = "advanced") -> List[EvidenceItem]:
+        """
+        Executes targeted dual searches on Tavily for high-volatility claims to detect both the claim and its 2026 successor.
+        """
+        # If the claim is evergreen (e.g. math or physics), we can skip heavy web search
+        if claim.time_volatility_score < 0.15:
+            return []
+
+        if not self._client:
+            print("[TavilyVerifier] Tavily client not configured, skipping search.")
+            return []
+
+        queries = [claim.verification_query]
+        # If volatility is high and a superseding query exists, run dual search
+        if claim.time_volatility_score >= 0.50 and claim.superseding_query and claim.superseding_query != claim.verification_query:
+            queries.append(claim.superseding_query)
+
+        # Execute queries concurrently
+        search_tasks = [self._execute_single_search(q, search_depth) for q in queries]
+        results_nested = await asyncio.gather(*search_tasks, return_exceptions=True)
+
+        combined_evidence: List[EvidenceItem] = []
+        seen_urls = set()
+
+        for res in results_nested:
+            if isinstance(res, list):
+                for ev in res:
+                    if ev.url not in seen_urls:
+                        seen_urls.add(ev.url)
+                        combined_evidence.append(ev)
+
+        # Return top 5 unique, most relevant pieces of evidence
+        return combined_evidence[:5]
 
     async def verify_batch(self, claims: List[Claim], search_depth: str = "advanced") -> Dict[str, List[EvidenceItem]]:
         """
