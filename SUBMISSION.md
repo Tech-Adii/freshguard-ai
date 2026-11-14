@@ -7,9 +7,13 @@
 * **Project Title:** FreshGuard AI
 * **Tagline:** Real-Time Temporal Fact Verification & Stale-Answer Shield for Generative AI
 * **Primary Problem Statement:** Problem Statement 06 — Build a Stale-Answer Detector for AI Applications
-* **Core Technologies Integrated:** **Bifrost by Maxim AI** & **Tavily (by Nebius)**
-* **Live Demo URL:** `http://localhost:8000` (Local) / Ready for deployment on Railway / Render / Vercel
-* **GitHub Repository URL:** `https://github.com/<your-username>/freshguard-ai`
+* **Hackathon:** Geek Room Global AI Hackathon on HackCulture
+* **Team Name:** Team SOL CULTURE
+* **Creators:** Adithya R Kulkarni & Manisha M Kulkarni
+* **Project Attribution:** THE PROJECT BY ADITHYA R KULKARNI AND MANISHA M KULKARNI | TEAM SOL CULTURE
+* **Core Technologies Integrated:** **Bifrost by Maxim AI** & **Tavily (by Nebius)** + **Google Gemini 3.5**
+* **Live Demo URL:** `http://localhost:8000` (Local)
+* **GitHub Repository URL:** `https://github.com/Tech-Adii/freshguard-ai`
 
 ---
 
