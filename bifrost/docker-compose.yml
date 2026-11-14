@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  bifrost:
+    image: ghcr.io/maximhq/bifrost:latest
+    container_name: freshguard-bifrost-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - BIFROST_PORT=8080
+    volumes:
+      - ./config.json:/app/config.json:ro
+    command: ["bifrost", "--config", "/app/config.json"]
+    restart: unless-stopped

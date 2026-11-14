@@ -1,0 +1,52 @@
+[
+  {
+    "id": "bench_pricing_openai",
+    "title": "OpenAI API Pricing Staleness",
+    "category": "pricing",
+    "input_text": "OpenAI's flagship GPT-4 model costs $30.00 per 1M prompt tokens and $60.00 per 1M completion tokens, while GPT-3.5-turbo remains the standard budget model at $1.50 per 1M tokens.",
+    "expected_status": "stale",
+    "known_stale_fact": "Old legacy GPT-4 pricing from 2023 ($30/$60). Current models like GPT-4o cost around $2.50/$10.00 per 1M tokens, and GPT-3.5 is largely superseded.",
+    "current_fact_2026": "OpenAI's current flagship models include GPT-4o, GPT-4o-mini, and o-series reasoning models with drastically lower pricing (GPT-4o is ~$2.50/$10 per 1M tokens).",
+    "explanation": "Pricing is one of the most volatile domains in AI. Hardcoded training weights frequently misquote prices that changed months or years ago."
+  },
+  {
+    "id": "bench_api_nextjs",
+    "title": "Next.js Routing & Data Fetching API",
+    "category": "api_and_docs",
+    "input_text": "To build server-side rendered pages in Next.js, create files inside the /pages directory and export the getServerSideProps or getStaticProps functions to fetch data on each request.",
+    "expected_status": "stale",
+    "known_stale_fact": "Next.js Pages Router and getServerSideProps/getStaticProps are legacy. Modern Next.js uses the App Router (/app) and React Server Components.",
+    "current_fact_2026": "Next.js recommends the App Router (/app directory) where React Server Components handle async data fetching natively using standard fetch() without getServerSideProps.",
+    "explanation": "Software libraries frequently release major architectural paradigm shifts that cause LLM code snippets to be deprecated or invalid."
+  },
+  {
+    "id": "bench_leadership_twitter",
+    "title": "Twitter / X Leadership",
+    "category": "leadership_and_people",
+    "input_text": "Parag Agrawal is currently the Chief Executive Officer (CEO) of Twitter, overseeing the company's product roadmap and engineering culture.",
+    "expected_status": "stale",
+    "known_stale_fact": "Parag Agrawal was replaced in late 2022 when Elon Musk acquired Twitter. Twitter was rebranded to X, with Linda Yaccarino appointed as CEO.",
+    "current_fact_2026": "Twitter was acquired by Elon Musk, rebranded to X Corp, and Linda Yaccarino serves as CEO.",
+    "explanation": "Executive leadership changes are rapid and frequently misstated by models trained on older web snapshots."
+  },
+  {
+    "id": "bench_evergreen_physics",
+    "title": "Speed of Light in Vacuum (Evergreen)",
+    "category": "evergreen",
+    "input_text": "The speed of light in a vacuum is exactly 299,792,458 meters per second, a fundamental physical constant denoted by the letter c.",
+    "expected_status": "fresh",
+    "known_stale_fact": "None. Fundamental physical constant.",
+    "current_fact_2026": "Exactly 299,792,458 m/s.",
+    "explanation": "The stale detector must not falsely flag evergreen scientific laws as outdated."
+  },
+  {
+    "id": "bench_python_features",
+    "title": "Recent Python Language Features",
+    "category": "api_and_docs",
+    "input_text": "Python 3.12 introduced isolated sub-interpreters, comprehensive f-string syntax improvements, and more readable tracebacks.",
+    "expected_status": "fresh",
+    "known_stale_fact": "None. Python 3.12 features are accurate.",
+    "current_fact_2026": "Python 3.12 indeed introduced PEP 701 f-string improvements and sub-interpreter enhancements.",
+    "explanation": "Accurate modern claims should achieve a high freshness score."
+  }
+]
