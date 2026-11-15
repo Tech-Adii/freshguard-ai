@@ -4,7 +4,7 @@
 ### Real-Time Fact Verification & Temporal Obsolescence Shield for Generative AI
 
 **Built by Team SOL CULTURE: Adithya R Kulkarni & Manisha M Kulkarni**  
-*Geek Room Global AI Hackathon (HackCulture) — Problem Statement 06*
+*Geek Room Global AI Hackathon (HackCulture) — Problem Statement 06 (AI Agents & Intelligent Systems)*
 
 <br/>
 
@@ -18,79 +18,47 @@
 
 <br/>
 
-[Live Dashboard](http://localhost:8000) · [📊 Interactive Pitch Deck](http://localhost:8000/presentation) · [📥 Download PPTX](FreshGuard_AI_Pitch_Deck.pptx) · [Architecture](#-architecture--pipeline) · [Quickstart](#-quickstart-in-60-seconds) · [Benchmarks](#-automated-benchmarks-100-pass) · [About the Team](#-team--attribution)
+[Live Dashboard](http://localhost:8000) · [📊 Presentation Deck](http://localhost:8000/presentation) · [Architecture](#-architecture--how-it-works) · [Benchmarks](#-automated-benchmarks-100-pass) · [Quickstart](#-quickstart-in-60-seconds) · [Middleware SDK](#-middleware-integration) · [Team Attribution](#-team--attribution)
 
 ---
 
 </div>
 
+## 📌 What is FreshGuard AI?
 
+**FreshGuard AI** is an autonomous temporal verification engine and middleware layer that stops Large Language Models from confidently serving outdated facts, expired pricing, and deprecated APIs.
 
-An executive pitch deck has been prepared and built into the platform:
+Every foundation model is permanently frozen at its pre-training cutoff date. When real-world facts change, LLMs hallucinate obsolete answers with 100% confidence.
 
-* **🖥️ Interactive In-Browser Presentation:** Navigate live slides with keyboard arrows (<kbd>←</kbd> / <kbd>→</kbd> / <kbd>Space</kbd>) and fullscreen (<kbd>F</kbd>) at **[`http://localhost:8000/presentation`](http://localhost:8000/presentation)**.
-* **📥 Official PowerPoint Deck:** Download the 16:9 widescreen presentation directly from the repository or API: **[`FreshGuard_AI_Pitch_Deck.pptx`](FreshGuard_AI_Pitch_Deck.pptx)**.
-
-| Slide # | Slide Title | Core Focus & Challenge Mapping |
-| :---: | :--- | :--- |
-| **01** | **Title & Executive Overview** | Problem Statement 06, Theme: AI Agents & Intelligent Systems, Team SOL CULTURE |
-| **02** | **Hackathon Challenge Alignment** | Explicit mapping of the 4 Core Requirements (Claim ID, Detection, Live Search, Scoring) |
-| **03** | **The Reality: Temporal Blindness** | Why LLMs generate outdated facts confidently; 4 catastrophic business vectors |
-| **04** | **Our Innovation: FreshGuard AI** | Autonomous temporal firewall, Volatility Indexing ($0.0-1.0$), Dual-Query Discovery |
-| **05** | **Mandatory Partner Tech: Tavily** | Deep integration of Tavily (by Nebius) for live 2026 web consensus and canonical sources |
-| **06** | **Mandatory Partner Tech: Bifrost** | Deep integration of Maxim AI Bifrost Gateway for model routing, caching, and Gemini failover |
-| **07** | **The 4-Stage Verification Workflow** | End-to-end execution path: Deconstruction → Temporal Gate → Search → Reasoning → Diff |
-| **08** | **Automated Benchmarks (100% Pass)** | Empirical proof against real pricing, Next.js API deprecation, and Twitter leadership |
-| **09** | **Modern Verification Workspace** | Glassmorphic dark terminal, Instant Flaw Decryption Matrix, Audio Briefings |
-| **10** | **Developer Middleware & REST API** | 2-line Python integration for LangChain/OpenAI, OpenAPI Swagger endpoints |
-| **11** | **Enterprise Commercial Viability** | TAM/SAM/SOM, high-value enterprise use cases, token-level streaming roadmap |
-| **12** | **Conclusion & Attribution** | Live links, GitHub URL, and mandatory team attribution |
+FreshGuard intercepts AI outputs, breaks them into individual factual assertions, checks them against live 2026 web consensus using **Tavily**, reasons through **Bifrost by Maxim AI**, and automatically replaces outdated information with verified ground truth.
 
 ---
 
-## 🎯 Hackathon Mandates & Core Requirements Fulfillments
+## ⚡ The Problem: Temporal Blindness in Production AI
 
-FreshGuard AI was engineered specifically to solve **Problem Statement 06: Build a Stale-Answer Detector for AI Applications** under the **AI Agents & Intelligent Systems** theme:
+When generative AI answers queries in fast-moving domains, historical training data produces critical failures:
 
-1. **Claim Identification:**
-   The `claim_extractor.py` engine decomposes complex, monolithic AI responses into atomic, independently testable statements. Each assertion is indexed with a **Temporal Volatility Score** ($0.0 - 1.0$), identifying whether the subject matter is static or rapidly decaying.
-2. **Freshness Detection:**
-   The system actively flags claims involving **product pricing, software API versions, company leadership, and regulations**. An autonomous superseding query formulation module flags legacy models (e.g. GPT-4), deprecated methods (e.g. `getServerSideProps`), and former executives.
-3. **Live Verification (Powered by Tavily):**
-   Flagged volatile claims are queried against live 2026 web consensus using **Tavily Search API** (`search_depth="advanced"`). Tavily retrieves authoritative documentation, current publish dates, and verifiable citation snippets.
-4. **Freshness Scoring (Powered by Bifrost):**
-   Evidence is evaluated through the **Bifrost AI Gateway (by Maxim AI)** with automatic failover to Google Gemini 3.5. Bifrost conducts forensic contradiction reasoning, applies heavy decay penalties to superseded entities, and computes an overall **Freshness Score ($0\% - 100\%$)** and **Factual Health Grade** (`Grade A+`, `Grade B`, `Grade F`).
+1. 💸 **Cloud & SaaS Pricing:** LLMs state that legacy GPT-4 costs $30.00/1M tokens, unaware that modern GPT-4o costs $2.50/1M tokens.
+2. 💻 **Software & Framework APIs:** LLMs instruct developers to use Next.js `/pages` with `getServerSideProps`, which is deprecated in modern Next.js App Router (`/app`).
+3. 👔 **Executive Leadership & Rebrands:** LLMs present former executives who departed years ago as current leaders (e.g. stating Parag Agrawal is CEO of Twitter, missing the 2022 acquisition and X rebrand).
+4. ⚖️ **Compliance & Regulations:** LLMs cite repealed legal guidelines, expired tariffs, and outdated safety thresholds.
 
 ---
 
-## 📌 Why We Built FreshGuard AI
+## 🔍 Before & After: Standard LLMs vs FreshGuard AI
 
-Every Large Language Model suffers from **Temporal Blindness**. An LLM's understanding of the world is permanently frozen at its pre-training cutoff date.
-
-When users query fast-moving, high-stakes information:
-- 💸 **AI & Cloud Pricing:** LLMs hallucinate outdated pricing (e.g. stating legacy GPT-4 costs $30.00/1M tokens when modern GPT-4o costs $2.50/1M).
-- 💻 **Software & Framework APIs:** LLMs recommend deprecated APIs and syntax (e.g. Next.js `/pages` directory with `getServerSideProps` instead of modern App Router Server Components).
-- 👔 **Executive Leadership & Rebrands:** LLMs present former leaders who departed years ago as current executives (e.g. stating Parag Agrawal is CEO of Twitter).
-- ⚖️ **Regulations & Compliance:** LLMs cite repealed laws, expired tariffs, and outdated guidelines.
-
-**FreshGuard AI** was engineered to solve this exact problem. It acts as an autonomous temporal guardrail and verification layer. It intercepts AI responses, extracts atomic assertions, calculates domain volatility, queries live 2026 web consensus via **Tavily**, reasons through **Bifrost by Maxim AI**, and automatically rewrites outdated text into verified ground truth.
+| Domain | What Standard LLMs Answer (Stale) | What FreshGuard AI Delivers (2026 Ground Truth) | Verdict |
+| :--- | :--- | :--- | :---: |
+| **OpenAI Pricing** | *"GPT-4 costs $30.00 per 1M prompt tokens."* | Detected legacy tier; updated to active GPT-4o pricing ($2.50/1M tokens). | 🔴 **0% (Stale)** |
+| **Next.js Framework** | *"Create files inside `/pages` and export `getServerSideProps`."* | Flagged deprecated API; replaced with modern App Router Server Components. | 🔴 **0% (Stale)** |
+| **Twitter Leadership** | *"Parag Agrawal is currently the CEO of Twitter."* | Caught 2022 executive departure, X rebrand, and current Linda Yaccarino leadership. | 🔴 **0% (Stale)** |
+| **Fundamental Physics** | *"The speed of light in vacuum is 299,792,458 m/s."* | Timeless physical constant verified with zero unnecessary search overhead. | 🟢 **100% (Evergreen)** |
 
 ---
 
-## ⚡ Comparison: Standard LLMs vs FreshGuard AI
+## 🏛️ Architecture & How It Works
 
-| Real-World Domain | What Standard LLMs Answer (Stale) | What FreshGuard AI Delivers (2026 Ground Truth) |
-| :--- | :--- | :--- |
-| **OpenAI Flagship Pricing** | *"GPT-4 costs $30.00 per 1M prompt tokens."* | 🔴 **0% Score (Stale):** GPT-4 is legacy; OpenAI's current flagship is GPT-4o ($2.50/1M tokens). |
-| **Next.js Server Rendering** | *"Create files in `/pages` and export `getServerSideProps`."* | 🔴 **0% Score (Stale):** `/pages` is legacy; modern Next.js uses App Router (`/app`) with React Server Components. |
-| **Twitter / X Leadership** | *"Parag Agrawal is currently the CEO of Twitter."* | 🔴 **0% Score (Stale):** Parag Agrawal left Twitter (now X) in October 2022; CEO is Linda Yaccarino under Elon Musk. |
-| **Fundamental Physics** | *"The speed of light in a vacuum is 299,792,458 m/s."* | 🟢 **100% Score (Evergreen):** Timeless physical constant with 0% decay rate. |
-
----
-
-## 🏛️ Architecture & Pipeline
-
-FreshGuard combines live web evidence retrieval with dual-engine AI reasoning:
+FreshGuard combines live web retrieval with dual-engine AI reasoning:
 
 ```mermaid
 graph TD
@@ -116,36 +84,59 @@ graph TD
 ```
 
 ### The 4-Stage Verification Workflow:
-1. **Atomic Claim Extraction:** The input text is decomposed into individual, testable claims. Each claim is assigned a **Temporal Volatility Score** ($0.0 - 1.0$) based on how fast that specific domain changes.
-2. **Dual-Query Web Retrieval (Tavily):** Rather than searching just the literal text, FreshGuard executes two parallel queries:
-   - *Direct Verification Query:* Validates whether the claimed detail existed.
-   - *Superseding Discovery Query:* Searches for the modern 2026 successor (e.g. *"what is the current OpenAI flagship model in 2026"*).
-3. **Forensic Contradiction Reasoning (Bifrost Gateway):** Cross-examines assertions against retrieved evidence. Enforces the **Superseded Entity Rule** (if an entity like GPT-4 or `getServerSideProps` is legacy, it is strictly flagged as stale, even if historical tables list old prices).
-4. **Answer Rewriting & Diff Generation:** Automatically synthesizes a clean, fact-corrected 2026 answer and renders an inline strikethrough comparison.
+
+1. **Atomic Claim Extraction (`claim_extractor.py`):**
+   Decomposes monolithic AI text into individual, testable claims. Each claim is assigned a **Temporal Volatility Score** ($0.0 - 1.0$).
+2. **Temporal Sensitivity Gate:**
+   Timeless facts (like mathematics or physics constants) take the fast path ($100\%$ score, zero decay rate), saving compute and avoiding unnecessary search calls.
+3. **Dual-Query Web Retrieval (`tavily_verifier.py`):**
+   Executes two parallel searches via **Tavily**:
+   - *Direct Verification Query:* Checks if the claimed assertion existed.
+   - *Autonomous Superseding Query:* Proactively searches for modern 2026 replacements (e.g., *"current OpenAI flagship model pricing 2026"*).
+4. **Forensic Contradiction Reasoning (`freshness_scorer.py`):**
+   Cross-examines claims against retrieved evidence using **Bifrost by Maxim AI** (with Google Gemini 3.5 fallback). Flags superseded entities, computes the mathematical Freshness Score ($0\%-100\%$), and synthesizes an updated ground-truth answer.
+
+---
+
+## 🤝 Mandatory Partner Technology Integrations
+
+FreshGuard AI deeply integrates both required partner technologies:
+
+### 1. Tavily Search Engine (by Nebius)
+- **Role:** Real-time web ground-truth retrieval.
+- **Implementation:** Configured with `search_depth="advanced"` to fetch factual consensus snippets rather than noisy HTML markup.
+- **Date-Weighted Crawling:** Targets live 2026 evidence to detect mid-year pricing changes, API deprecation notices, and leadership turnover.
+- **Source Transparency:** Extracts publish timestamps, relevance confidence, and direct citation URLs.
+
+### 2. Bifrost AI Gateway (by Maxim AI)
+- **Role:** High-performance AI gateway, LLM orchestration, and reasoning.
+- **Implementation:** Configured via `bifrost/config.json` and Docker Compose with an OpenAI-compatible proxy interface.
+- **Zero-Downtime Fallback:** Transparent routing with instant automatic failover to Google Gemini 3.5 direct API.
+- **Structured Reasoning:** Enforces strict Pydantic schemas for atomic claim extraction and forensic contradiction analysis.
 
 ---
 
 ## ✨ Key Features
 
-- **💬 Enterprise Intelligence Workspace:** Polished dark-mode verification terminal with a collapsible intelligence dock, audit history search, and Star ⭐ / Archive 📦 session management.
+- **🎯 Instant Flaw Decryption Matrix:** Clear, color-coded cards that pinpoint *what is wrong, why it is outdated, when it was superseded*, and direct source citations.
+- **⚡ Radial SVG Freshness Dial:** Circular progress meter with live count-up animation and **Factual Health Grade Badges** (`Grade A+`, `Grade B`, `Grade F`).
+- **⚖️ Side-by-Side Visual Diff:** Inline strikethrough comparison showing outdated claims in red and verified 2026 replacements in green.
+- **🔊 Voice Audio Briefing:** Built-in Web Speech API audio synthesis with animated equalizer bars that verbally summarizes contradictions and corrections.
+- **💬 Enterprise Intelligence Workspace:** Polished dark-mode verification terminal with a collapsible intelligence dock, audit history search, and Star ⭐ / Archive 📦 session controls.
 - **🕵️ Zero-Retention Incognito Mode:** In-memory verification mode that executes volatile fact checking without writing session telemetry to SQLite.
-- **🎯 Instant Flaw Decryption HUD:** Color-coded flaw cards that pinpoint *exactly what is wrong* with zero difficulty, including decay volatility percentages and direct citations.
-- **⚡ Radial SVG Freshness Gauge:** High-tech circular progress ring with count-up animation and **Factual Health Grade Badges** (`Grade A+`, `Grade B`, `Grade F`).
-- **🔊 Integrated Audio Briefing:** Built-in Web Speech API audio synthesis with animated equalizer bars that reads out detected contradictions and verified corrections.
-- **ℹ️ Interactive "About Me" Modal:** Built right into the web header to present project details, architecture, and team attribution.
-- **🔌 Drop-In Middleware & REST API:** Ready to integrate into any LangChain, LlamaIndex, or AutoGen pipeline.
+- **🔌 Drop-In Middleware & REST API:** Ready to integrate into any LangChain, LlamaIndex, AutoGen, or custom Python pipeline in 2 lines of code.
 
 ---
 
 ## 🧪 Automated Benchmarks (100% Pass)
 
-FreshGuard includes an automated evaluation suite testing real-world obsolescence vectors:
+FreshGuard includes an automated evaluation suite testing real-world temporal decay vectors:
 
 ```bash
 python benchmarks/run_benchmarks.py
 ```
 
-### Benchmark Test Results:
+### Benchmark Suite Output:
 ```
 ======================================================================
 🛡️ RUNNING FRESHGUARD AI FORENSIC ACCURACY BENCHMARK SUITE
@@ -201,13 +192,13 @@ PORT=8000
 ```bash
 python run.py
 ```
-Open **`http://localhost:8000`** in your browser. The dashboard is live and ready!
+Open **`http://localhost:8000`** in your browser. The dashboard is live and operational!
 
 ---
 
 ## 💻 Middleware Integration
 
-You can drop FreshGuard into any Python LLM application as an automated verification shield:
+Drop FreshGuard into any Python LLM application as an automated verification shield:
 
 ```python
 import requests
@@ -220,7 +211,7 @@ def shield_llm_output(ai_response: str) -> str:
     )
     report = response.json()
     if report["overall_freshness_score"] < 70.0:
-        print(f"⚠️ Warning: Stale answer detected! Score: {report['overall_freshness_score']}%")
+        print(f"⚠️ Stale answer detected! Score: {report['overall_freshness_score']}% (Grade: {report['health_grade']})")
         return report["updated_text"]
     return ai_response
 
@@ -229,6 +220,15 @@ raw_output = "OpenAI's flagship model GPT-4 costs $30.00 per 1M prompt tokens."
 clean_output = shield_llm_output(raw_output)
 print(clean_output)
 ```
+
+---
+
+## 📊 Executive Presentation & Pitch Deck
+
+An executive pitch deck is included in both PowerPoint and interactive web formats:
+
+- **🖥️ Interactive Web Presentation:** Accessible directly in the running app at **[`http://localhost:8000/presentation`](http://localhost:8000/presentation)** (keyboard navigation with <kbd>←</kbd> / <kbd>→</kbd> / <kbd>Space</kbd> / <kbd>F</kbd> for fullscreen).
+- **📥 PowerPoint Presentation:** Downloadable directly from the repository or via API at **[`FreshGuard_AI_Pitch_Deck.pptx`](FreshGuard_AI_Pitch_Deck.pptx)**.
 
 ---
 
@@ -275,6 +275,7 @@ freshguard-ai/
 **FreshGuard AI** was designed and engineered for the **Geek Room Global AI Hackathon** on **HackCulture**:
 
 * **Problem Statement:** Problem Statement 06 — *Build a Stale-Answer Detector for AI Applications*
+* **Theme:** *AI Agents & Intelligent Systems*
 * **Team Name:** **Team SOL CULTURE**
 * **Project Team:**
   * **Adithya R Kulkarni**
@@ -286,9 +287,9 @@ freshguard-ai/
 
 ## 📜 Acknowledgments & Partner Tech
 
-- **Tavily (by Nebius):** For providing the live web search API that anchors our answers in 2026 ground truth.
+- **Tavily (by Nebius):** For providing the real-time search API that grounds model responses in live 2026 truth.
 - **Maxim AI:** For the **Bifrost AI Gateway** architecture enabling multi-model routing, caching, and failover.
-- **Geek Room & HackCulture:** For hosting the Global AI Hackathon.
+- **Geek Room & HackCulture:** For organizing the Global AI Hackathon.
 
 ---
 
