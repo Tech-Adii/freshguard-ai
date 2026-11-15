@@ -91,7 +91,7 @@ Directly solves one of the biggest bottlenecks preventing enterprise LLM adoptio
 AI is used systematically across claim extraction, volatility ranking, temporal contradiction detection, and fact-corrected text generation.
 
 ### 5. User Experience (10/10)
-Clean, conversational interface inspired by ChatGPT and Claude. Features a collapsible sidebar with live query history, Star ⭐ and Archive 📦 management, in-memory Incognito verification, an interactive "About Me" modal, side-by-side diff views, instant flaw decryption cards, and audio briefing.
+Responsive, glassmorphic dark-mode workspace. Features a collapsible intelligence dock with audit history, Star ⭐ and Archive 📦 session controls, zero-retention Incognito verification, an interactive "About Me" modal, side-by-side visual diffs, instant flaw decryption cards, and Web Speech audio briefing.
 
 ### 6. Scalability and Potential (10/10)
 Designed as a plug-and-play middleware. Can be wrapped around any existing LLM workflow (OpenAI, Anthropic, Gemini, LangChain, LlamaIndex) with a 2-line code snippet.
@@ -112,7 +112,7 @@ Designed as a plug-and-play middleware. Can be wrapped around any existing LLM w
   - Review the radial gauge score (0% Stale) and the side-by-side strikethrough comparison with 2026 ground-truth replacements.
 * **Stage 4 | Conversational Features & Audio Briefing:**
   - Click **Read Aloud** to hear the animated Web Speech synthesis briefing.
-  - Review the ChatGPT-style sidebar with search, Star, and Archive controls.
+  - Review the intelligence sidebar with audit search, Star favorites, and Archive controls.
   - Test **Incognito Mode** for private in-memory verifications without database persistence.
   - Click **About Me** in the header to review project architecture and team attribution.
 * **Stage 5 | Conclusion:**

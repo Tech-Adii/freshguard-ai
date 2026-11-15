@@ -614,7 +614,7 @@ def create_award_winning_deck():
     s9 = prs.slides.add_slide(blank_layout)
     set_slide_background(s9)
     add_header(s9, "Award-Winning UX", "Designed for Instant Decryption & Effortless Review",
-               "ChatGPT & Claude inspired conversational interface designed so users understand flaws with zero difficulty.")
+               "Polished enterprise verification interface designed so users understand flaws with zero difficulty.")
 
     ux_features = [
         ("🎯 Instant Flaw Decryption Matrix",
@@ -873,7 +873,7 @@ def create_award_winning_deck():
     summary_bullets = [
         "✅ 100% Core Challenge Compliance: Solves Problem Statement 06 with 100% benchmark verification pass rate across real-world domains.",
         "✅ Meaningful Partner Integration: Deep synergy between Tavily Search (Nebius) for live consensus and Bifrost Gateway (Maxim AI) for failover & reasoning.",
-        "✅ Human-Engineered UX: Conversational ChatGPT/Claude interface, Instant Flaw Decryption Matrix, Voice Audio Briefings, and Side-by-Side Diffs.",
+        "✅ Human-Engineered UX: Enterprise Verification Workspace, Instant Flaw Decryption Matrix, Voice Audio Briefings, and Side-by-Side Diffs.",
         "✅ Enterprise Ready: Drop-in 2-line Python middleware, OpenAPI microservice, in-memory Incognito mode, and persistent SQLite auditing."
     ]
     for b in summary_bullets:
