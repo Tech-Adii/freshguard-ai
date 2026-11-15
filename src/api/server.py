@@ -157,12 +157,16 @@ async def serve_presentation():
     return {"message": "Presentation deck is being prepared."}
 
 @app.get("/download-deck")
+@app.get("/download-presentation")
+@app.get("/download-ppt")
 async def download_pptx():
-    pptx_path = Path(__file__).parent.parent.parent / "FreshGuard_AI_Pitch_Deck.pptx"
-    if pptx_path.exists():
-        return FileResponse(
-            str(pptx_path),
-            media_type="application/vnd.openxmlformats-officedocument.presentationml.presentation",
-            filename="FreshGuard_AI_Pitch_Deck.pptx"
-        )
+    base_dir = Path(__file__).parent.parent.parent
+    for fname in ["FreshGuard_AI.pptx", "FreshGuard_AI_Pitch_Deck.pptx"]:
+        pptx_path = base_dir / fname
+        if pptx_path.exists():
+            return FileResponse(
+                str(pptx_path),
+                media_type="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                filename=fname
+            )
     raise HTTPException(status_code=404, detail="Presentation deck file not found.")

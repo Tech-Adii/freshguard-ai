@@ -13,12 +13,12 @@
 [![Gemini](https://img.shields.io/badge/Reasoning%20LLM-Google%20Gemini%203.5-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev)
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI%20Async-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Benchmarks](https://img.shields.io/badge/Benchmarks-100%25%20PASS-emerald?style=for-the-badge&logo=pytest&logoColor=white)](#-automated-benchmarks-100-pass)
-[![Pitch Deck](https://img.shields.io/badge/Pitch%20Deck-12%20Slides-indigo?style=for-the-badge&logo=powerpoint&logoColor=white)](FreshGuard_AI_Pitch_Deck.pptx)
+[![Presentation](https://img.shields.io/badge/Presentation-FreshGuard_AI.pptx-indigo?style=for-the-badge&logo=powerpoint&logoColor=white)](FreshGuard_AI.pptx)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
 <br/>
 
-[Live Dashboard](http://localhost:8000) · [📊 Presentation Deck](http://localhost:8000/presentation) · [Architecture](#-architecture--how-it-works) · [Benchmarks](#-automated-benchmarks-100-pass) · [Quickstart](#-quickstart-in-60-seconds) · [Middleware SDK](#-middleware-integration) · [Team Attribution](#-team--attribution)
+[Live Dashboard](http://localhost:8000) · [📊 Presentation](FreshGuard_AI.pptx) · [Architecture](#-architecture--how-it-works) · [Benchmarks](#-automated-benchmarks-100-pass) · [Quickstart](#-quickstart-in-60-seconds) · [Middleware SDK](#-middleware-integration) · [Team Attribution](#-team--attribution)
 
 ---
 
@@ -243,13 +243,10 @@ print(clean_output)
 
 ---
 
-## 📊 Executive Presentation & Pitch Deck
+## 📊 Project Presentation
 
-Executive presentation decks are included in both PowerPoint and interactive web formats:
-
+- **📥 Official Presentation (.pptx):** **[`FreshGuard_AI.pptx`](FreshGuard_AI.pptx)**
 - **🖥️ Interactive Web Presentation:** Accessible directly in the running app at **[`http://localhost:8000/presentation`](http://localhost:8000/presentation)** (keyboard navigation with <kbd>←</kbd> / <kbd>→</kbd> / <kbd>Space</kbd> / <kbd>F</kbd> for fullscreen).
-- **📥 Project Presentation Deck (.pptx):** **[`FreshGuard_AI.pptx`](FreshGuard_AI.pptx)**
-- **📥 12-Slide Pitch Deck (.pptx):** **[`FreshGuard_AI_Pitch_Deck.pptx`](FreshGuard_AI_Pitch_Deck.pptx)**
 
 ---
 
@@ -264,7 +261,7 @@ freshguard-ai/
 │   │       ├── index.html         # Full-featured verification terminal with About Me modal
 │   │       ├── app.js             # Conversational stream, dial animations & TTS
 │   │       ├── style.css          # Dark glassmorphism, glowing badges & diffs
-│   │       └── presentation.html  # Interactive 12-slide web pitch deck
+│   │       └── presentation.html  # Interactive web presentation deck
 │   ├── core/
 │   │   ├── claim_extractor.py     # Atomic claim extraction & volatility scoring
 │   │   ├── tavily_verifier.py     # Dual-query live 2026 search via Tavily
@@ -282,7 +279,6 @@ freshguard-ai/
 │   ├── config.json                # Maxim AI Bifrost provider & routing config
 │   └── docker-compose.yml         # Container configuration for Bifrost
 ├── FreshGuard_AI.pptx             # Official project presentation deck
-├── FreshGuard_AI_Pitch_Deck.pptx  # 12-slide executive pitch deck
 ├── requirements.txt               # Python package dependencies
 ├── run.py                         # Application launcher with hot-reload
 ├── cli.py                         # Command-line verification tool
