@@ -16,7 +16,7 @@
 * **Core Technologies Integrated:** **Tavily (by Nebius)** & **Bifrost by Maxim AI** + **Google Gemini 3.5**
 * **Live Demo URL:** `http://localhost:8000` (Local)
 * **Interactive Pitch Deck:** `http://localhost:8000/presentation`
-* **PowerPoint Deck:** `FreshGuard_AI_Pitch_Deck.pptx` (12 Widescreen Slides)
+* **PowerPoint Decks:** `FreshGuard_AI.pptx` (Project Presentation) & `FreshGuard_AI_Pitch_Deck.pptx` (12-Slide Widescreen Pitch Deck)
 * **GitHub Repository URL:** `https://github.com/Tech-Adii/freshguard-ai`
 
 ---

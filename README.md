@@ -245,10 +245,11 @@ print(clean_output)
 
 ## 📊 Executive Presentation & Pitch Deck
 
-An executive pitch deck is included in both PowerPoint and interactive web formats:
+Executive presentation decks are included in both PowerPoint and interactive web formats:
 
 - **🖥️ Interactive Web Presentation:** Accessible directly in the running app at **[`http://localhost:8000/presentation`](http://localhost:8000/presentation)** (keyboard navigation with <kbd>←</kbd> / <kbd>→</kbd> / <kbd>Space</kbd> / <kbd>F</kbd> for fullscreen).
-- **📥 PowerPoint Presentation:** Downloadable directly from the repository or via API at **[`FreshGuard_AI_Pitch_Deck.pptx`](FreshGuard_AI_Pitch_Deck.pptx)**.
+- **📥 Project Presentation Deck (.pptx):** **[`FreshGuard_AI.pptx`](FreshGuard_AI.pptx)**
+- **📥 12-Slide Pitch Deck (.pptx):** **[`FreshGuard_AI_Pitch_Deck.pptx`](FreshGuard_AI_Pitch_Deck.pptx)**
 
 ---
 
@@ -280,7 +281,8 @@ freshguard-ai/
 ├── bifrost/
 │   ├── config.json                # Maxim AI Bifrost provider & routing config
 │   └── docker-compose.yml         # Container configuration for Bifrost
-├── FreshGuard_AI_Pitch_Deck.pptx  # Official 12-slide executive presentation
+├── FreshGuard_AI.pptx             # Official project presentation deck
+├── FreshGuard_AI_Pitch_Deck.pptx  # 12-slide executive pitch deck
 ├── requirements.txt               # Python package dependencies
 ├── run.py                         # Application launcher with hot-reload
 ├── cli.py                         # Command-line verification tool
