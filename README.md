@@ -24,7 +24,7 @@
 
 </div>
 
-## 📊 Executive Presentation & Pitch Deck (12 Slides)
+
 
 An executive pitch deck has been prepared and built into the platform:
 
