@@ -34,14 +34,34 @@ FreshGuard intercepts AI outputs, breaks them into individual factual assertions
 
 ---
 
-## ⚡ The Problem: Temporal Blindness in Production AI
+## 🎯 Problem Statement: AI-Powered Fact Verification & Information Freshness
+### Challenge 06: Build a Stale-Answer Detector for AI Applications
 
-When generative AI answers queries in fast-moving domains, historical training data produces critical failures:
+> **Theme:** AI Agents & Intelligent Systems  
+> **Challenge:** Problem Statement 06 — AI-Powered Fact Verification & Information Freshness  
+> **Mandatory Partner Tech:** Tavily (by Nebius) & Bifrost (by Maxim AI)
 
-1. 💸 **Cloud & SaaS Pricing:** LLMs state that legacy GPT-4 costs $30.00/1M tokens, unaware that modern GPT-4o costs $2.50/1M tokens.
-2. 💻 **Software & Framework APIs:** LLMs instruct developers to use Next.js `/pages` with `getServerSideProps`, which is deprecated in modern Next.js App Router (`/app`).
-3. 👔 **Executive Leadership & Rebrands:** LLMs present former executives who departed years ago as current leaders (e.g. stating Parag Agrawal is CEO of Twitter, missing the 2022 acquisition and X rebrand).
-4. ⚖️ **Compliance & Regulations:** LLMs cite repealed legal guidelines, expired tariffs, and outdated safety thresholds.
+### The Challenge
+Large language models can confidently generate answers containing information that is no longer accurate. Product pricing changes, APIs are updated, regulations evolve, and company leadership changes, but AI-generated responses continue presenting outdated information as fact. 
+
+Because foundational LLMs are permanently frozen at their pre-training snapshot dates, they suffer from **Temporal Blindness** — presenting historical knowledge as current truth across high-stakes domains:
+- 💸 **Cloud & SaaS Pricing:** LLMs state that legacy GPT-4 costs $30.00/1M tokens, unaware that modern GPT-4o costs $2.50/1M tokens.
+- 💻 **Software & Framework APIs:** LLMs instruct developers to use Next.js `/pages` with `getServerSideProps`, which is deprecated in modern Next.js App Router (`/app`).
+- 👔 **Executive Leadership & Rebrands:** LLMs present former leaders who departed years ago as current executives (e.g., stating Parag Agrawal is CEO of Twitter, missing the 2022 acquisition and X rebrand).
+- ⚖️ **Compliance & Regulations:** LLMs cite repealed legal guidelines, expired tariffs, and outdated safety thresholds.
+
+### The Goal & Expected Outcome
+- **Goal:** Build an AI verification layer that accepts an LLM-generated response, detects potentially stale factual claims, re-verifies them against live web sources using **Tavily**, and provides a mathematical freshness score for each claim using **Bifrost by Maxim AI**.
+- **Expected Outcome:** A production-ready AI verification system that helps users distinguish current, reliable information from potentially outdated AI responses, understand which claims are supported by live sources, and receive verified ground-truth replacements.
+
+### Core Hackathon Requirements & Implementation Matrix
+
+| # | Core Requirement | Hackathon Evaluation Mandate | FreshGuard AI Implementation |
+| :---: | :--- | :--- | :--- |
+| **1** | **Claim Identification** | Analyze an AI-generated response and identify factual statements that may be time-sensitive. | Atomic AST claim decomposition in `claim_extractor.py` + domain-aware **Temporal Volatility Indexing** ($0.0 - 1.0$). |
+| **2** | **Freshness Detection** | Flag claims that could have become outdated, including pricing, API versions, laws, or leadership. | Autonomous superseding query formulation targeting legacy entities, retired syntax, and executive departures. |
+| **3** | **Live Verification** | Re-check flagged claims against current web sources using live research. | Real-time consensus retrieval via **Tavily Search API** (`search_depth="advanced"`) with 2026 date-weighted filtering. |
+| **4** | **Freshness Scoring** | Provide a freshness score for each relevant claim based on the available evidence. | Multi-tier forensic contradiction reasoning through **Bifrost Gateway** with decay penalties and health grades. |
 
 ---
 

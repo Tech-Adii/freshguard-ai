@@ -135,8 +135,8 @@ def create_award_winning_deck():
     # =========================================================================
     s2 = prs.slides.add_slide(blank_layout)
     set_slide_background(s2)
-    add_header(s2, "Hackathon Challenge Alignment", "Problem Statement 06: Stale-Answer Detector for AI Applications",
-               "100% compliant with the hackathon's core challenge requirements and expected outcomes.")
+    add_header(s2, "Theme: AI Agents & Intelligent Systems · Problem Statement 06", "Build a Stale-Answer Detector for AI Applications",
+               "Goal: Detect stale claims (pricing, APIs, regulations, leadership), reverify via Tavily, and score freshness via Bifrost.")
 
     reqs = [
         ("1. Claim Identification",

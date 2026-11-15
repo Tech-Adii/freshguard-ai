@@ -6,10 +6,10 @@
 
 * **Project Title:** FreshGuard AI
 * **Tagline:** Real-Time Temporal Fact Verification & Stale-Answer Shield for Generative AI
-* **Primary Problem Statement:** Problem Statement 06 — Build a Stale-Answer Detector for AI Applications
 * **Hackathon:** Geek Room Global AI Hackathon on HackCulture
 * **Theme:** AI Agents & Intelligent Systems
-* **Primary Problem Statement:** Problem Statement 06 — Build a Stale-Answer Detector for AI Applications
+* **Challenge Track:** AI-Powered Fact Verification & Information Freshness
+* **Problem Statement:** Problem Statement 06 — Build a Stale-Answer Detector for AI Applications
 * **Team Name:** Team SOL CULTURE
 * **Creators:** Adithya R Kulkarni & Manisha M Kulkarni
 * **Project Attribution:** THE PROJECT BY ADITHYA R KULKARNI AND MANISHA M KULKARNI | TEAM SOL CULTURE
@@ -29,17 +29,22 @@
 
 ---
 
-## 🎯 3. Explanation of the Problem Being Solved
+## 🎯 3. Explanation of the Problem Being Solved (Problem Statement 06)
 
-### The Problem: The Temporal Cutoff Dilemma
-Every generative AI model suffers from a fixed training cutoff date. When users ask questions requiring up-to-date knowledge:
-1. **SaaS & Cloud Pricing:** LLMs confidently hallucinate outdated rates (e.g., claiming legacy GPT-4 costs $30/1M tokens or quoting retired enterprise tiers).
-2. **Software Engineering & APIs:** Models output deprecated libraries and syntax (e.g., recommending Next.js Pages router `getServerSideProps` instead of modern App Router Server Components).
-3. **Corporate Leadership & Governance:** Models fail to identify executive departures, rebrands, and mergers (e.g., asserting former executives still lead platforms acquired years ago).
-4. **Regulations & Law:** Models cite repealed policies and old regulatory limits.
+### Official Problem Statement Definition
+Large language models can confidently generate answers containing information that is no longer accurate. Product pricing changes, APIs are updated, regulations evolve, and company leadership changes, but AI-generated responses continue presenting outdated information as fact.
 
-### The Impact
-Deploying generative AI without a temporal verification layer results in broken code, user misinformation, compliance violations, and customer churn.
+The challenge is to build a verification layer that examines AI-generated answers, identifies claims that may have become outdated, and checks them against current information from reliable sources.
+
+### Core Goals & Fulfillments
+* **Goal:** Build a system that accepts an LLM-generated answer, detects potentially stale factual claims, reverifies them using live sources via **Tavily**, and provides a freshness score for each relevant claim via **Bifrost by Maxim AI**.
+* **Expected Outcome:** A working AI verification system that helps users identify potentially outdated information in LLM-generated responses and understand which claims are supported by current sources.
+
+### The 4 Core Hackathon Requirements:
+1. **Claim Identification:** Analyzes AI output and decomposes it into independent, time-sensitive atomic assertions with **Temporal Volatility Scores** ($0.0 - 1.0$) in `claim_extractor.py`.
+2. **Freshness Detection:** Dynamically detects claims at risk of temporal decay, actively formulating dual queries to uncover modern successors.
+3. **Live Verification:** Re-checks flagged claims against live 2026 web consensus using **Tavily Search API** (`search_depth="advanced"`).
+4. **Freshness Scoring:** Calculates mathematical Freshness Scores ($0\%-100\%$) and health grades through forensic contradiction reasoning powered by **Bifrost by Maxim AI**.
 
 ---
 
